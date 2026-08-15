@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>StudiaNet: A Virtual World for Users!</title>
+    <title>Procyon: A Virtual World for Users!</title>
     <style>
         * {
             font-family: "Comic Sans MS", "Comic Sans", cursive;
@@ -232,7 +232,7 @@
             font-size: 11px;
             transition: 0.2s;
         }
-        
+
         .grid-item:hover { background: #E8F0FE; }
 
         #modal-overlay {
@@ -296,7 +296,7 @@
 
 <div id="modal-overlay">
     <div id="client-modal">
-        <div style="background:#000033; color:white; margin:-20px -20px 20px -20px; padding:8px; text-align:left; font-size:12px;">&nbsp; StudiaNet Launcher</div>
+        <div style="background:#000033; color:white; margin:-20px -20px 20px -20px; padding:8px; text-align:left; font-size:12px;">&nbsp; Procyon Launcher</div>
         <p class="large-text"><b>Deseja entrar no mundo virtual?</b></p>
         <button onclick="jogarNaWeb()" style="width:100%; padding:15px; margin-bottom:10px; background:#00CC00; color:white; font-weight:bold; font-size:18px; border:2px solid #006600;">JOGAR NA WEB</button>
         <button onclick="fecharModal()" style="font-size:11px; background:none; border:none; text-decoration:underline; cursor:pointer;">Cancelar</button>
@@ -304,7 +304,7 @@
 </div>
 
 <div class="logo-area" id="web-logo">
-    <div class="logo-text" onclick="window.location.reload()">StudiaNet</div>
+    <div class="logo-text" onclick="window.location.reload()">Procyon</div>
 </div>
 
 <div class="economy-bar" id="web-economy">
@@ -317,7 +317,7 @@
     <a onclick="abrirJogos()">Jogos</a>
     <a onclick="abrirCatalogo()">Catálogo</a>
     <a onclick="abrirPessoas()">Pessoas</a>
-    <a onclick="abrirClub()">StudiaNet Club</a>
+    <a onclick="abrirClub()">Procyon Club</a>
     <a onclick="abrirForum()">Fórum</a>
     <a onclick="abrirNoticias()">Notícias</a>
     <a onclick="abrirParentes()">Parentes</a>
@@ -350,14 +350,14 @@
 
     <main class="feed" id="main-feed">
         <div style="text-align:center;">
-            <h2>Bem-vindo ao StudiaNet!</h2>
+            <h2>Bem-vindo ao Procyon!</h2>
             <p class="large-text">Crie, jogue e explore com seus amigos.</p>
             <div class="btn-play" onclick="abrirJogos()">JOGAR AGORA!</div>
         </div>
 
         <div class="card" style="text-align:left; margin-top:30px;">
             <h4>Novidades</h4>
-            <p class="large-text">• StudiaNet Club já está disponível!</p>
+            <p class="large-text">• Procyon Club já está disponível!</p>
             <p class="large-text">• Otimização de performance aplicada.</p>
         </div>
     </main>
@@ -365,7 +365,7 @@
     <aside class="right-panel">
         <div class="card">
             <h4>Avatar</h4>
-            <div class="avatar-box" id="av-box">STUDIA</div>
+            <div class="avatar-box" id="av-box">PROCYON</div>
             <button onclick="mudarCorAvatar()" style="width:100%; margin-top:10px; padding:8px; font-weight:bold;">Mudar Cor</button>
         </div>
     </aside>
@@ -375,7 +375,7 @@
     <canvas id="gameCanvas"></canvas>
 </div>
 
-<footer id="web-footer">StudiaNet Corporation &copy; 2010-2026</footer>
+<footer id="web-footer">Procyon Corporation &copy; 2010-2026</footer>
 
 <script>
 const feed = document.getElementById('main-feed');
@@ -395,7 +395,7 @@ function abrirJogos() {
     <div class="grid-layout">
         <div class="grid-item" onclick="abrirModal()">
             <div style="height:70px; background:#BBB; border:1px solid #333; margin-bottom:5px; display:flex; align-items:center; justify-content:center; font-size:40px; color:#555; font-weight:bold;">?</div>
-            <b>Baseplate</b><br><small>Made by: StudiaNet</small>
+            <b>Baseplate</b><br><small>Made by: Procyon</small>
         </div>
         ${'<div class="grid-item"><div style="height:70px; background:#BBB; border:1px solid #333; margin-bottom:5px;"></div><b>Unknown</b><br><small>Made by: Unknown</small></div>'.repeat(5)}
     </div>`;
@@ -418,7 +418,7 @@ function abrirPessoas() {
 
 function abrirClub() {
     feed.innerHTML = `
-        <h2>StudiaNet Club</h2>
+        <h2>Procyon Club</h2>
         <div class="club-container">
             <div class="club-card club-nada"><div style="float:right;">Grátis</div><h3>Nada</h3><p>1 jogo ativo | 5 SNX / 10 TIX diários</p></div>
             <div class="club-card club-basic"><div style="float:right;">100 SNX</div><h3>Basic Club</h3><p>5 jogos ativos | 10 SNX / 50 TIX diários</p><button onclick="assinar('BASIC', 100, 0)">Assinar</button></div>
@@ -430,7 +430,7 @@ function abrirClub() {
 function abrirParentes() {
     feed.innerHTML = `<h2>Guia para Parentes</h2>
     <div class="large-text" style="background:white; padding:20px; border:1px solid #333;">
-        <h4>O que é o StudiaNet?</h4><p>O StudiaNet é um mundo virtual focado em criatividade e educação.</p>
+        <h4>O que é o Procyon?</h4><p>O Procyon é um mundo virtual focado em criatividade e educação.</p>
         <h4>Segurança</h4><p>Contamos com sistemas de filtragem de chat e moderação para garantir uma experiência saudável.</p>
         <h4>Educação</h4><p>Ao criar mundos, os usuários aprendem noções básicas de lógica e design.</p>
     </div>`;
@@ -438,7 +438,7 @@ function abrirParentes() {
 
 function abrirForum() { feed.innerHTML = `<h2>Fórum</h2><p class="large-text">O fórum está em manutenção. Volte logo!</p>`; }
 function abrirNoticias() { feed.innerHTML = `<h2>Notícias</h2><p class="large-text">• Lançamento da v1.0 oficial!<br>• Novas ferramentas de construção em breve.</p>`; }
-function abrirAjuda() { feed.innerHTML = `<h2>Ajuda & Suporte</h2><p class="large-text">Dúvidas? Mande um e-mail para suporte@studianet.com</p>`; }
+function abrirAjuda() { feed.innerHTML = `<h2>Ajuda & Suporte</h2><p class="large-text">Dúvidas? Mande um e-mail para suporte@procyon.com</p>`; }
 
 function atualizarDistintivo() {
     const badge = document.getElementById('user-badge');
@@ -463,7 +463,7 @@ function fazerLogin() {
     document.getElementById('tix-val').innerText = conta.tix;
     currentPlan = conta.club;
     atualizarDistintivo();
-    alert("Bem-vindo ao StudiaNet!");
+    alert("Bem-vindo ao Procyon!");
 }
 
 function criarConta() {
