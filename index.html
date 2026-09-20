@@ -223,23 +223,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #222;
+            font-family: Arial, sans-serif;
+            font-size: 52px;
             font-weight: bold;
-            font-size: 60px;
-            text-shadow: 2px 2px 0px #000;
+            text-shadow: none;
             position: relative;
             overflow: hidden;
-        }
-
-        .avatar-box::before {
-            content: "";
-            position: absolute;
-            width: 115px;
-            height: 115px;
-            background: #FFD89A;
-            border: 3px solid #333;
-            border-radius: 50% !important;
-            box-shadow: 5px 5px 0 rgba(0,0,0,0.18);
         }
 
         .avatar-box span {
@@ -247,7 +237,7 @@
             z-index: 2;
             color: #222;
             font-family: Arial, sans-serif;
-            font-size: 42px;
+            font-size: 52px;
             font-weight: bold;
             text-shadow: none;
         }
@@ -339,9 +329,8 @@
             width: 82px;
             height: 82px;
             margin: 0 auto 8px auto;
-            background: #FFD89A;
+            background: #EEF4FA;
             border: 2px solid #333;
-            border-radius: 50% !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -349,7 +338,6 @@
             font-family: Arial, sans-serif;
             font-size: 27px;
             font-weight: bold;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
         }
 
         .catalog-status {
@@ -371,78 +359,61 @@
         .face-detail {
             display: flex;
             gap: 20px;
-            align-items: stretch;
-            background: #F5F5F5;
-            border: 1px solid #555;
-            padding: 15px;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.18);
+            align-items: flex-start;
         }
 
         .face-preview {
-            width: 46%;
-            min-height: 330px;
+            width: 300px;
+            height: 300px;
+            min-width: 300px;
             background:
                 linear-gradient(
                     135deg,
-                    #6E99C9 0%,
-                    #8FB3DA 50%,
-                    #5E82AD 100%
+                    #6E99C9,
+                    #8FB3DA
                 );
             border: 2px solid #333;
-            box-shadow:
-                inset 0 0 0 4px rgba(255,255,255,0.18),
-                5px 5px 0 rgba(0,0,0,0.18);
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .face-preview::before {
-            content: "";
-            position: absolute;
-            width: 210px;
-            height: 210px;
-            background: #FFD89A;
-            border: 3px solid #333;
-            border-radius: 50% !important;
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.18);
-        }
-
-        .face-preview span {
-            position: relative;
-            z-index: 2;
             color: #222;
             font-family: Arial, sans-serif;
             font-size: 72px;
             font-weight: bold;
             text-shadow: none;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.18);
+        }
+
+        .face-preview span {
+            font-family: Arial, sans-serif;
+            font-size: 72px;
+            font-weight: bold;
+            color: #222;
         }
 
         .face-info {
-            flex: 1;
+            width: 300px;
+            min-width: 300px;
             background: #FFF;
             border: 1px solid #777;
-            padding: 20px;
+            padding: 18px;
             text-align: left;
             box-shadow: inset 0 0 0 2px #EEE;
         }
 
         .face-info h3 {
-            font-size: 30px;
-            margin: 0 0 4px 0;
-            color: #222;
+            font-size: 28px;
+            margin-top: 0;
+            margin-bottom: 8px;
         }
 
         .face-subtitle {
             color: #777;
             font-size: 12px;
-            margin-bottom: 12px;
         }
 
         .face-price {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             color: #005500;
             margin: 12px 0;
@@ -452,35 +423,40 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            border-top: 1px solid #CCC;
-            border-bottom: 1px solid #CCC;
-            padding: 10px 0;
-            margin: 12px 0;
-            font-size: 13px;
+            gap: 8px;
+            background: #F7F7F7;
+            border: 1px solid #AAA;
+            padding: 8px;
+            font-size: 12px;
         }
 
         .favorite-button {
-            padding: 7px 12px;
-            background: #FFF;
-            border: 1px solid #777;
+            padding: 6px 9px;
+            border: 1px solid #999;
+            background: white;
             font-weight: bold;
             font-size: 11px;
         }
 
         .favorite-button:hover {
-            background: #FFECEC;
+            background: #FFE8E8;
         }
 
         .favorite-button.active {
-            background: #FFD9D9;
-            border-color: #CC0000;
-            color: #990000;
+            background: #FFE1E1;
+            border-color: #CC5555;
+            color: #AA0000;
+        }
+
+        .favorite-count {
+            font-size: 13px;
+            margin: 10px 0;
         }
 
         .face-description {
+            border-top: 1px solid #999;
             margin-top: 15px;
-            padding-top: 10px;
+            padding-top: 15px;
             line-height: 1.5;
         }
 
@@ -571,19 +547,12 @@
             box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
         }
 
-        .profile-avatar::before {
-            content: "";
-            position: absolute;
-            width: 76%;
-            height: 76%;
-            background: #FFD89A;
-            border: 2px solid #333;
-            border-radius: 50% !important;
-        }
-
         .profile-avatar span {
             position: relative;
             z-index: 2;
+            font-family: Arial, sans-serif;
+            font-size: 42px;
+            font-weight: bold;
         }
 
         .profile-stats {
@@ -642,9 +611,8 @@
         .favorite-face-preview {
             width: 52px;
             height: 52px;
-            background: #FFD89A;
+            background: #EEF4FA;
             border: 2px solid #333;
-            border-radius: 50% !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -696,17 +664,6 @@
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
-        }
-
-        .avatar-editor-preview::before {
-            content: "";
-            position: absolute;
-            width: 130px;
-            height: 130px;
-            background: #FFD89A;
-            border: 3px solid #333;
-            border-radius: 50% !important;
-            box-shadow: 5px 5px 0 rgba(0,0,0,0.18);
         }
 
         .avatar-editor-preview span {
@@ -938,7 +895,7 @@
 
             <a
                 href="javascript:void(0)"
-                onclick="window.location.reload()"
+                onclick="fazerLogout()"
                 style="color:red; font-size:11px;"
             >
                 [Sair]
@@ -1064,7 +1021,6 @@ const bgImage = new Image();
 bgImage.src = "fundo.png";
 
 const rostos = [
-
     {
         id: "rosto_sorrindo",
         nome: ":)",
@@ -1073,7 +1029,6 @@ const rostos = [
         descricao:
             "Um sorriso simples e clássico. Perfeito para quem quer começar sua coleção de rostos do Procyon."
     },
-
     {
         id: "rosto_triste",
         nome: ":(",
@@ -1082,7 +1037,6 @@ const rostos = [
         descricao:
             "Nem todo dia é um dia feliz. Esse rosto representa tristeza, decepção ou aquele momento em que tudo deu errado."
     },
-
     {
         id: "rosto_feliz",
         nome: ":D",
@@ -1091,7 +1045,6 @@ const rostos = [
         descricao:
             "Um sorriso enorme para mostrar que você está feliz pra caramba."
     },
-
     {
         id: "rosto_lingua",
         nome: ":P",
@@ -1100,7 +1053,6 @@ const rostos = [
         descricao:
             "Coloque a língua pra fora e mostre que você não está levando as coisas tão a sério."
     },
-
     {
         id: "rosto_wink",
         nome: ";)",
@@ -1109,7 +1061,6 @@ const rostos = [
         descricao:
             "Uma piscadinha clássica. Ideal para brincadeiras, piadas e aquele ar de quem sabe alguma coisa."
     },
-
     {
         id: "rosto_surpreso",
         nome: ":O",
@@ -1118,7 +1069,6 @@ const rostos = [
         descricao:
             "Você acabou de descobrir alguma coisa inacreditável? Esse é o rosto para isso."
     },
-
     {
         id: "rosto_confuso",
         nome: ":/",
@@ -1127,7 +1077,6 @@ const rostos = [
         descricao:
             "Para aquele momento em que você simplesmente não sabe o que está acontecendo."
     },
-
     {
         id: "rosto_choro",
         nome: ":'(",
@@ -1136,7 +1085,6 @@ const rostos = [
         descricao:
             "Uma versão mais dramática do rosto triste. Use quando a situação realmente ficou complicada."
     },
-
     {
         id: "rosto_cool",
         nome: "8)",
@@ -1145,7 +1093,6 @@ const rostos = [
         descricao:
             "O rosto clássico de quem está tranquilo, confiante e simplesmente não se importa."
     },
-
     {
         id: "rosto_uh",
         nome: "._.",
@@ -1154,7 +1101,6 @@ const rostos = [
         descricao:
             "Sem palavras. Absolutamente nenhuma palavra."
     },
-
     {
         id: "rosto_angry",
         nome: ">:(",
@@ -1163,7 +1109,6 @@ const rostos = [
         descricao:
             "Quando alguém realmente conseguiu te irritar."
     },
-
     {
         id: "rosto_love",
         nome: "<3",
@@ -1172,7 +1117,6 @@ const rostos = [
         descricao:
             "Um pequeno coração para mostrar carinho por alguém ou simplesmente decorar seu avatar."
     }
-
 ];
 
 let inventario =
@@ -1193,46 +1137,35 @@ let favoritos =
 let compraPendente = null;
 
 function salvarInventario() {
-
     localStorage.setItem(
         "procyonInventario",
         JSON.stringify(inventario)
     );
-
 }
 
 function salvarRostoEquipado() {
-
     localStorage.setItem(
         "procyonRostoEquipado",
         rostoEquipado
     );
-
 }
 
 function salvarFavoritos() {
-
     localStorage.setItem(
         "procyonFavoritos",
         JSON.stringify(favoritos)
     );
-
 }
 
 function possuiRosto(id) {
-
     return inventario.includes(id);
-
 }
 
 function favoritouRosto(id) {
-
     return favoritos.includes(id);
-
 }
 
 function alternarFavorito(id) {
-
     const rosto =
         rostos.find(
             item => item.id === id
@@ -1241,44 +1174,33 @@ function alternarFavorito(id) {
     if (!rosto) return;
 
     if (favoritouRosto(id)) {
-
         favoritos =
             favoritos.filter(
                 item => item !== id
             );
-
     } else {
-
         favoritos.push(id);
-
     }
 
     salvarFavoritos();
-
     abrirRosto(id);
-
 }
 
 function atualizarAvatarElemento(elemento, nome) {
-
     if (!elemento) return;
 
     elemento.innerHTML =
         `<span>${nome}</span>`;
-
 }
 
 function obterRostoEquipado() {
-
     return rostos.find(
         item =>
             item.id === rostoEquipado
     ) || null;
-
 }
 
 function abrirRosto(id) {
-
     const rosto =
         rostos.find(
             item => item.id === id
@@ -1302,7 +1224,6 @@ function abrirRosto(id) {
     let botao = "";
 
     if (equipado) {
-
         botao = `
             <button
                 class="face-equipped"
@@ -1311,9 +1232,7 @@ function abrirRosto(id) {
                 ✓ Equipado
             </button>
         `;
-
     } else if (possui) {
-
         botao = `
             <button
                 class="face-equip-button"
@@ -1322,9 +1241,7 @@ function abrirRosto(id) {
                 Equipar
             </button>
         `;
-
     } else {
-
         botao = `
             <button
                 class="face-buy-button"
@@ -1333,11 +1250,9 @@ function abrirRosto(id) {
                 Comprar por ${rosto.preco} SNX
             </button>
         `;
-
     }
 
     feed.innerHTML = `
-
         <h2>Rosto</h2>
 
         <div class="face-detail">
@@ -1408,11 +1323,9 @@ function abrirRosto(id) {
 
         </div>
     `;
-
 }
 
 function abrirConfirmacao(id) {
-
     const rosto =
         rostos.find(
             item => item.id === id
@@ -1421,20 +1334,16 @@ function abrirConfirmacao(id) {
     if (!rosto) return;
 
     if (!usuarioAtual) {
-
         alert(
             "Você precisa estar logado para comprar itens!"
         );
-
         return;
     }
 
     if (possuiRosto(id)) {
-
         alert(
             "Você já possui esse rosto!"
         );
-
         return;
     }
 
@@ -1442,11 +1351,9 @@ function abrirConfirmacao(id) {
         usuarioAtual.snx <
         rosto.preco
     ) {
-
         alert(
             "Você não possui SNX suficiente!"
         );
-
         return;
     }
 
@@ -1460,25 +1367,19 @@ function abrirConfirmacao(id) {
     document.getElementById(
         "confirm-overlay"
     ).style.display = "block";
-
 }
 
 function fecharConfirmacao() {
-
     compraPendente = null;
 
     document.getElementById(
         "confirm-overlay"
     ).style.display = "none";
-
 }
 
 function confirmarCompra() {
-
     if (!compraPendente) {
-
         fecharConfirmacao();
-
         return;
     }
 
@@ -1490,14 +1391,11 @@ function confirmarCompra() {
         );
 
     if (!rosto) {
-
         fecharConfirmacao();
-
         return;
     }
 
     if (!usuarioAtual) {
-
         fecharConfirmacao();
 
         alert(
@@ -1508,7 +1406,6 @@ function confirmarCompra() {
     }
 
     if (possuiRosto(rosto.id)) {
-
         fecharConfirmacao();
 
         alert(
@@ -1524,7 +1421,6 @@ function confirmarCompra() {
         usuarioAtual.snx <
         rosto.preco
     ) {
-
         fecharConfirmacao();
 
         alert(
@@ -1557,13 +1453,10 @@ function confirmarCompra() {
     );
 
     abrirRosto(rosto.id);
-
 }
 
 function equiparRosto(id) {
-
     if (!usuarioAtual) {
-
         alert(
             "Você precisa estar logado para equipar um rosto!"
         );
@@ -1572,7 +1465,6 @@ function equiparRosto(id) {
     }
 
     if (!possuiRosto(id)) {
-
         alert(
             "Você ainda não possui esse rosto!"
         );
@@ -1594,11 +1486,9 @@ function equiparRosto(id) {
     atualizarAvatar();
 
     abrirAvatar();
-
 }
 
 function atualizarAvatar() {
-
     const avatar =
         document.getElementById(
             "av-box"
@@ -1607,7 +1497,6 @@ function atualizarAvatar() {
     if (!avatar) return;
 
     if (!rostoEquipado) {
-
         atualizarAvatarElemento(
             avatar,
             "PROCYON"
@@ -1620,25 +1509,19 @@ function atualizarAvatar() {
         obterRostoEquipado();
 
     if (rosto) {
-
         atualizarAvatarElemento(
             avatar,
             rosto.nome
         );
-
     } else {
-
         atualizarAvatarElemento(
             avatar,
             "PROCYON"
         );
-
     }
-
 }
 
 function atualizarEconomia() {
-
     if (!usuarioAtual) return;
 
     const snx =
@@ -1652,33 +1535,24 @@ function atualizarEconomia() {
         );
 
     if (snx) {
-
         snx.innerText =
             usuarioAtual.snx;
-
     }
 
     if (tix) {
-
         tix.innerText =
             usuarioAtual.tix;
-
     }
-
 }
 
 function abrirAvatar() {
-
     if (!usuarioAtual) {
-
         feed.innerHTML = `
-
             <h2>Meu Avatar</h2>
 
             <p class="large-text">
                 Você precisa estar logado para editar seu avatar.
             </p>
-
         `;
 
         return;
@@ -1687,7 +1561,6 @@ function abrirAvatar() {
     let rostosDisponiveis = "";
 
     rostos.forEach(rosto => {
-
         const possui =
             possuiRosto(rosto.id);
 
@@ -1697,7 +1570,6 @@ function abrirAvatar() {
         if (!possui) return;
 
         rostosDisponiveis += `
-
             <div
                 class="grid-item"
                 onclick="equiparRosto('${rosto.id}')"
@@ -1724,15 +1596,11 @@ function abrirAvatar() {
                 </b>
 
             </div>
-
         `;
-
     });
 
     if (!rostosDisponiveis) {
-
         rostosDisponiveis = `
-
             <div
                 style="
                     grid-column:1/-1;
@@ -1759,9 +1627,7 @@ function abrirAvatar() {
                 </button>
 
             </div>
-
         `;
-
     }
 
     const rostoAtual =
@@ -1773,7 +1639,6 @@ function abrirAvatar() {
         : "PROCYON";
 
     feed.innerHTML = `
-
         <h2>Meu Avatar</h2>
 
         <div class="avatar-editor">
@@ -1819,23 +1684,17 @@ function abrirAvatar() {
         <div class="grid-layout">
             ${rostosDisponiveis}
         </div>
-
     `;
-
 }
 
 function abrirPerfil() {
-
     if (!usuarioAtual) {
-
         feed.innerHTML = `
-
             <h2>Meu Perfil</h2>
 
             <p class="large-text">
                 Você precisa estar logado para ver seu perfil.
             </p>
-
         `;
 
         return;
@@ -1855,14 +1714,11 @@ function abrirPerfil() {
     let favoritosHTML = "";
 
     if (favoritosDoUsuario.length) {
-
         favoritosDoUsuario.forEach(item => {
-
             const possui =
                 possuiRosto(item.id);
 
             favoritosHTML += `
-
                 <div
                     class="favorite-face-card"
                     onclick="abrirRosto('${item.id}')"
@@ -1891,15 +1747,10 @@ function abrirPerfil() {
                     </div>
 
                 </div>
-
             `;
-
         });
-
     } else {
-
         favoritosHTML = `
-
             <div
                 style="
                     text-align:center;
@@ -1924,13 +1775,10 @@ function abrirPerfil() {
                 </button>
 
             </div>
-
         `;
-
     }
 
     feed.innerHTML = `
-
         <h2>Meu Perfil</h2>
 
         <div class="profile-box">
@@ -2043,31 +1891,53 @@ function abrirPerfil() {
             ${favoritosHTML}
 
         </div>
-
     `;
+}
 
+function fazerLogout() {
+    usuarioAtual = null;
+
+    localStorage.removeItem(
+        "usuarioAtual"
+    );
+
+    document.getElementById(
+        "login-section"
+    ).style.display = "block";
+
+    document.getElementById(
+        "user-info"
+    ).style.display = "none";
+
+    document.getElementById(
+        "snx-val"
+    ).innerText = "0";
+
+    document.getElementById(
+        "tix-val"
+    ).innerText = "0";
+
+    currentPlan = "NADA";
+
+    atualizarAvatar();
+
+    window.location.reload();
 }
 
 function fecharModal() {
-
     document.getElementById(
         "modal-overlay"
     ).style.display = "none";
-
 }
 
 function abrirModal() {
-
     document.getElementById(
         "modal-overlay"
     ).style.display = "block";
-
 }
 
 function abrirJogos() {
-
     feed.innerHTML = `
-
         <h2>Jogos</h2>
 
         <input
@@ -2133,15 +2003,12 @@ function abrirJogos() {
 
         </div>
     `;
-
 }
 
 function abrirCatalogo() {
-
     let itens = "";
 
     rostos.forEach(rosto => {
-
         const possui =
             possuiRosto(rosto.id);
 
@@ -2149,7 +2016,6 @@ function abrirCatalogo() {
             favoritouRosto(rosto.id);
 
         itens += `
-
             <div
                 class="grid-item"
                 onclick="abrirRosto('${rosto.id}')"
@@ -2188,13 +2054,10 @@ function abrirCatalogo() {
                 </div>
 
             </div>
-
         `;
-
     });
 
     feed.innerHTML = `
-
         <h2>Catálogo</h2>
 
         <div class="filter-box">
@@ -2230,13 +2093,10 @@ function abrirCatalogo() {
             ${itens}
 
         </div>
-
     `;
-
 }
 
 function filtrarCatalogo(texto) {
-
     const busca =
         texto
         .toLowerCase()
@@ -2248,7 +2108,6 @@ function filtrarCatalogo(texto) {
         );
 
     itens.forEach(item => {
-
         const textoItem =
             item.innerText.toLowerCase();
 
@@ -2256,27 +2115,19 @@ function filtrarCatalogo(texto) {
             textoItem.includes(busca)
             ? ""
             : "none";
-
     });
-
 }
 
 function mostrarTodosRostos() {
-
     abrirCatalogo();
-
 }
 
 function mostrarRostos() {
-
     abrirCatalogo();
-
 }
 
 function abrirPessoas() {
-
     feed.innerHTML = `
-
         <h2>Pessoas</h2>
 
         <input
@@ -2295,7 +2146,6 @@ function abrirPessoas() {
                         style="
                             height:60px;
                             background:#6E99C9;
-                            border-radius:50% !important;
                             margin:0 auto 5px auto;
                             width:60px;
                         "
@@ -2309,13 +2159,10 @@ function abrirPessoas() {
 
         </div>
     `;
-
 }
 
 function abrirClub() {
-
     feed.innerHTML = `
-
         <h2>Procyon Club</h2>
 
         <div class="club-container">
@@ -2382,13 +2229,10 @@ function abrirClub() {
 
         </div>
     `;
-
 }
 
 function abrirParentes() {
-
     feed.innerHTML = `
-
         <h2>Guia para Parentes</h2>
 
         <div
@@ -2430,63 +2274,45 @@ function abrirParentes() {
 
         </div>
     `;
-
 }
 
 function abrirForum() {
-
     feed.innerHTML = `
-
         <h2>Fórum</h2>
 
         <p class="large-text">
             O fórum está em manutenção.
             Volte logo!
         </p>
-
     `;
-
 }
 
 function abrirNoticias() {
-
     feed.innerHTML = `
-
         <h2>Notícias</h2>
 
         <p class="large-text">
-
             • Lançamento da v1.0 oficial!<br>
             • Novas ferramentas de construção em breve.
-
         </p>
-
     `;
-
 }
 
 function abrirAjuda() {
-
     feed.innerHTML = `
-
         <h2>
             Ajuda & Suporte
         </h2>
 
         <p class="large-text">
-
             Dúvidas?
             Mande um e-mail para
             suporte@procyon.com
-
         </p>
-
     `;
-
 }
 
 function atualizarDistintivo() {
-
     const badge =
         document.getElementById(
             "user-badge"
@@ -2498,27 +2324,22 @@ function atualizarDistintivo() {
         "inline-block";
 
     if (currentPlan === "BASIC") {
-
         badge.innerText =
             "[Basic Club]";
 
         badge.style.backgroundColor =
             "#00CC00";
-
     } else if (
         currentPlan === "TURBO"
     ) {
-
         badge.innerText =
             "[Turbo Club]";
 
         badge.style.backgroundColor =
             "#1A73E8";
-
     } else if (
         currentPlan === "MAX"
     ) {
-
         badge.innerText =
             "[MAX CLUB]";
 
@@ -2527,21 +2348,19 @@ function atualizarDistintivo() {
 
         badge.style.color =
             "#000";
-
     } else {
-
         badge.innerText =
             "[Membro]";
 
         badge.style.backgroundColor =
             "#999";
 
+        badge.style.color =
+            "#FFF";
     }
-
 }
 
 if (usuarioAtual) {
-
     document.getElementById(
         "login-section"
     ).style.display =
@@ -2568,11 +2387,9 @@ if (usuarioAtual) {
         usuarioAtual.tix;
 
     atualizarDistintivo();
-
 }
 
 async function fazerLogin() {
-
     const nome =
         document.getElementById(
             "user-in"
@@ -2584,7 +2401,6 @@ async function fazerLogin() {
         ).value;
 
     if (!nome || !senha) {
-
         alert(
             "Digite seu usuário e senha!"
         );
@@ -2593,7 +2409,6 @@ async function fazerLogin() {
     }
 
     try {
-
         const resposta =
             await fetch(
                 `${API}/login`,
@@ -2616,7 +2431,6 @@ async function fazerLogin() {
             await resposta.json();
 
         if (!resposta.ok) {
-
             alert(
                 dados.erro ||
                 "Erro ao fazer login."
@@ -2664,7 +2478,6 @@ async function fazerLogin() {
             "NADA";
 
         atualizarDistintivo();
-
         atualizarAvatar();
 
         alert(
@@ -2672,19 +2485,15 @@ async function fazerLogin() {
         );
 
     } catch (erro) {
-
         console.error(erro);
 
         alert(
             "Não foi possível conectar ao servidor Procyon."
         );
-
     }
-
 }
 
 async function criarConta() {
-
     const nome =
         document.getElementById(
             "user-in"
@@ -2701,7 +2510,6 @@ async function criarConta() {
         senha.length < 3 ||
         senha.length > 20
     ) {
-
         alert(
             "Usuário/Senha devem ter entre 3 e 20 caracteres!"
         );
@@ -2714,7 +2522,6 @@ async function criarConta() {
             nome
         )
     ) {
-
         alert(
             "O usuário só pode conter letras, números e _"
         );
@@ -2723,7 +2530,6 @@ async function criarConta() {
     }
 
     try {
-
         const resposta =
             await fetch(
                 `${API}/cadastro`,
@@ -2746,7 +2552,6 @@ async function criarConta() {
             await resposta.json();
 
         if (!resposta.ok) {
-
             alert(
                 dados.erro ||
                 "Erro ao criar conta."
@@ -2760,15 +2565,12 @@ async function criarConta() {
         );
 
     } catch (erro) {
-
         console.error(erro);
 
         alert(
             "Não foi possível conectar ao servidor Procyon."
         );
-
     }
-
 }
 
 atualizarAvatar();
@@ -2776,7 +2578,6 @@ atualizarAvatar();
 let gameLoopId;
 
 function jogarNaWeb() {
-
     fecharModal();
 
     document.getElementById(
@@ -2810,11 +2611,9 @@ function jogarNaWeb() {
         "block";
 
     iniciarEngine();
-
 }
 
 function iniciarEngine() {
-
     const canvas =
         document.getElementById(
             "gameCanvas"
@@ -2830,40 +2629,27 @@ function iniciarEngine() {
         window.innerHeight;
 
     const player = {
-
         x: 100,
         y: 100,
-
         width: 50,
         height: 50,
-
         velX: 0,
         velY: 0,
-
         speed: 6,
-
         jumpPower: 16,
-
         onGround: false
-
     };
 
     const ground = {
-
         x: 0,
-
         y:
             canvas.height - 100,
-
         width:
             canvas.width,
-
         height: 100
-
     };
 
     window.onresize = () => {
-
         canvas.width =
             window.innerWidth;
 
@@ -2875,11 +2661,9 @@ function iniciarEngine() {
 
         ground.width =
             canvas.width;
-
     };
 
     let fps = 0;
-
     let frames = 0;
 
     let lastTime =
@@ -2888,7 +2672,6 @@ function iniciarEngine() {
     const keys = {};
 
     document.onkeydown = e => {
-
         keys[
             e.key.toLowerCase()
         ] = true;
@@ -2896,23 +2679,17 @@ function iniciarEngine() {
         if (
             e.key === "Escape"
         ) {
-
             window.location.reload();
-
         }
-
     };
 
     document.onkeyup = e => {
-
         keys[
             e.key.toLowerCase()
         ] = false;
-
     };
 
     function atualizarFPS() {
-
         frames++;
 
         const agora =
@@ -2921,46 +2698,32 @@ function iniciarEngine() {
         if (
             agora - lastTime >= 1000
         ) {
-
             fps = frames;
-
             frames = 0;
-
             lastTime = agora;
-
         }
-
     }
 
     function update() {
-
         if (keys["a"]) {
-
             player.velX =
                 -player.speed;
-
         } else if (keys["d"]) {
-
             player.velX =
                 player.speed;
-
         } else {
-
             player.velX = 0;
-
         }
 
         if (
             (keys[" "] || keys["w"]) &&
             player.onGround
         ) {
-
             player.velY =
                 -player.jumpPower;
 
             player.onGround =
                 false;
-
         }
 
         player.velY += 0.7;
@@ -2975,7 +2738,6 @@ function iniciarEngine() {
             player.y + player.height >=
             ground.y
         ) {
-
             player.y =
                 ground.y -
                 player.height;
@@ -2984,35 +2746,27 @@ function iniciarEngine() {
 
             player.onGround =
                 true;
-
         }
 
         if (player.x < 0) {
-
             player.x = 0;
-
         }
 
         if (
             player.x + player.width >
             canvas.width
         ) {
-
             player.x =
                 canvas.width -
                 player.width;
-
         }
-
     }
 
     function draw() {
-
         if (
             bgImage.complete &&
             bgImage.naturalHeight !== 0
         ) {
-
             ctx.drawImage(
                 bgImage,
                 0,
@@ -3020,9 +2774,7 @@ function iniciarEngine() {
                 canvas.width,
                 canvas.height
             );
-
         } else {
-
             ctx.fillStyle =
                 "#87CEEB";
 
@@ -3032,7 +2784,6 @@ function iniciarEngine() {
                 canvas.width,
                 canvas.height
             );
-
         }
 
         ctx.fillStyle =
@@ -3099,26 +2850,20 @@ function iniciarEngine() {
             21,
             56
         );
-
     }
 
     function gameLoop() {
-
         atualizarFPS();
-
         update();
-
         draw();
 
         gameLoopId =
             requestAnimationFrame(
                 gameLoop
             );
-
     }
 
     gameLoop();
-
 }
 
 </script>
