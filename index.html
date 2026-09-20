@@ -1148,6 +1148,11 @@ let rostoEquipado =
         "procyonRostoEquipado"
     ) || "";
 
+let acessorioEquipado =
+    localStorage.getItem(
+        "procyonAcessorioEquipado"
+    ) || "";
+
 let favoritos =
     JSON.parse(
         localStorage.getItem("procyonFavoritos")
@@ -1174,6 +1179,13 @@ function salvarRostoEquipado() {
     localStorage.setItem(
         "procyonRostoEquipado",
         rostoEquipado
+    );
+}
+
+function salvarAcessorioEquipado() {
+    localStorage.setItem(
+        "procyonAcessorioEquipado",
+        acessorioEquipado
     );
 }
 
@@ -1641,6 +1653,37 @@ function equiparRosto(id) {
     abrirAvatar();
 }
 
+function equiparAcessorio(id) {
+    if (!usuarioAtual) {
+        alert(
+            "Você precisa estar logado para equipar um acessório!"
+        );
+        return;
+    }
+
+    if (!possuiAcessorio(id)) {
+        alert(
+            "Você ainda não possui esse acessório!"
+        );
+        return;
+    }
+
+    const acessorio =
+        acessorios.find(
+            item => item.id === id
+        );
+
+    if (!acessorio) return;
+
+    acessorioEquipado = id;
+
+    salvarAcessorioEquipado();
+
+    atualizarAvatar();
+
+    abrirAvatar();
+}
+
 function atualizarAvatar() {
     const avatar =
         document.getElementById(
@@ -1649,29 +1692,41 @@ function atualizarAvatar() {
 
     if (!avatar) return;
 
-    if (!rostoEquipado) {
-        atualizarAvatarElemento(
-            avatar,
-            "PROCYON"
-        );
-
-        return;
-    }
-
     const rosto =
         obterRostoEquipado();
 
-    if (rosto) {
-        atualizarAvatarElemento(
-            avatar,
-            rosto.nome
+    const acessorio =
+        acessorios.find(
+            item => item.id === acessorioEquipado
         );
-    } else {
-        atualizarAvatarElemento(
-            avatar,
-            "PROCYON"
-        );
-    }
+
+    avatar.innerHTML = `
+        ${
+            rosto
+            ? `<span>${rosto.nome}</span>`
+            : `<span>PROCYON</span>`
+        }
+        ${
+            acessorio
+            ? `
+                <img
+                    src="${acessorio.imagem}"
+                    alt="${acessorio.nome}"
+                    style="
+                        position:absolute;
+                        width:125px;
+                        height:125px;
+                        object-fit:contain;
+                        top:-8px;
+                        left:50%;
+                        transform:translateX(-50%);
+                        z-index:3;
+                    "
+                >
+            `
+            : ""
+        }
+    `;
 }
 
 function atualizarEconomia() {
@@ -1702,12 +1757,10 @@ function abrirAvatar() {
     if (!usuarioAtual) {
         feed.innerHTML = `
             <h2>Meu Avatar</h2>
-
             <p class="large-text">
                 Você precisa estar logado para editar seu avatar.
             </p>
         `;
-
         return;
     }
 
@@ -1735,11 +1788,9 @@ function abrirAvatar() {
                     }
                 "
             >
-
                 <div class="catalog-face">
                     ${rosto.nome}
                 </div>
-
                 <b>
                     ${
                         equipado
@@ -1747,7 +1798,68 @@ function abrirAvatar() {
                         : "Usar"
                     }
                 </b>
+            </div>
+        `;
+    });
 
+    let acessoriosDisponiveis = "";
+
+    acessorios.forEach(acessorio => {
+        const possui =
+            possuiAcessorio(acessorio.id);
+
+        const equipado =
+            acessorioEquipado === acessorio.id;
+
+        if (!possui) return;
+
+        acessoriosDisponiveis += `
+            <div
+                class="grid-item"
+                onclick="equiparAcessorio('${acessorio.id}')"
+                style="
+                    cursor:pointer;
+                    ${
+                        equipado
+                        ? "background:#E6F4EA; border:2px solid #00CC00;"
+                        : ""
+                    }
+                "
+            >
+                <div
+                    style="
+                        width:82px;
+                        height:82px;
+                        margin:0 auto 8px auto;
+                        background:#EEF4FA;
+                        border:2px solid #333;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        overflow:hidden;
+                    "
+                >
+                    <img
+                        src="${acessorio.imagem}"
+                        alt="${acessorio.nome}"
+                        style="
+                            width:82px;
+                            height:82px;
+                            object-fit:contain;
+                        "
+                    >
+                </div>
+                <b>
+                    ${acessorio.nome}
+                </b>
+                <br>
+                <span>
+                    ${
+                        equipado
+                        ? "✓ Equipado"
+                        : "Usar"
+                    }
+                </span>
             </div>
         `;
     });
@@ -1763,28 +1875,56 @@ function abrirAvatar() {
                     text-align:center;
                 "
             >
-
                 <div style="font-size:40px;">
                     :(
                 </div>
-
                 <p>
                     Você ainda não possui nenhum rosto.
                 </p>
-
                 <button
                     onclick="abrirCatalogo()"
                     style="padding:10px 20px; font-weight:bold;"
                 >
                     Ir para o Catálogo
                 </button>
+            </div>
+        `;
+    }
 
+    if (!acessoriosDisponiveis) {
+        acessoriosDisponiveis = `
+            <div
+                style="
+                    grid-column:1/-1;
+                    background:#FFF;
+                    border:1px solid #999;
+                    padding:25px;
+                    text-align:center;
+                "
+            >
+                <div style="font-size:40px;">
+                    🎩
+                </div>
+                <p>
+                    Você ainda não possui nenhum acessório.
+                </p>
+                <button
+                    onclick="mostrarAcessorios()"
+                    style="padding:10px 20px; font-weight:bold;"
+                >
+                    Ir para os Acessórios
+                </button>
             </div>
         `;
     }
 
     const rostoAtual =
         obterRostoEquipado();
+
+    const acessorioAtual =
+        acessorios.find(
+            item => item.id === acessorioEquipado
+        );
 
     const rostoAtualNome =
         rostoAtual
@@ -1795,39 +1935,58 @@ function abrirAvatar() {
         <h2>Meu Avatar</h2>
 
         <div class="avatar-editor">
-
-            <div class="avatar-editor-preview">
+            <div
+                class="avatar-editor-preview"
+                style="position:relative;"
+            >
                 <span>${rostoAtualNome}</span>
+                ${
+                    acessorioAtual
+                    ? `
+                        <img
+                            src="${acessorioAtual.imagem}"
+                            alt="${acessorioAtual.nome}"
+                            style="
+                                position:absolute;
+                                width:125px;
+                                height:125px;
+                                object-fit:contain;
+                                top:-8px;
+                                left:50%;
+                                transform:translateX(-50%);
+                                z-index:3;
+                            "
+                        >
+                    `
+                    : ""
+                }
             </div>
 
             <div>
-
                 <h3 style="margin-top:0;">
                     Seu Avatar
                 </h3>
-
                 <p>
-                    Escolha um dos rostos que você possui
+                    Escolha os rostos e acessórios que você possui
                     para usar no seu avatar.
                 </p>
-
-                ${
-                    rostoAtual
-                    ? `
-                        <p>
-                            <b>Rosto atual:</b>
-                            ${rostoAtual.nome}
-                        </p>
-                    `
-                    : `
-                        <p>
-                            <b>Nenhum rosto equipado.</b>
-                        </p>
-                    `
-                }
-
+                <p>
+                    <b>Rosto atual:</b>
+                    ${
+                        rostoAtual
+                        ? rostoAtual.nome
+                        : "Nenhum"
+                    }
+                </p>
+                <p>
+                    <b>Acessório atual:</b>
+                    ${
+                        acessorioAtual
+                        ? acessorioAtual.nome
+                        : "Nenhum"
+                    }
+                </p>
             </div>
-
         </div>
 
         <h3>
@@ -1836,6 +1995,14 @@ function abrirAvatar() {
 
         <div class="grid-layout">
             ${rostosDisponiveis}
+        </div>
+
+        <h3 style="margin-top:25px;">
+            Seus acessórios
+        </h3>
+
+        <div class="grid-layout">
+            ${acessoriosDisponiveis}
         </div>
     `;
 }
