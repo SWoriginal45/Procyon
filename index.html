@@ -378,6 +378,7 @@
 <footer id="web-footer">Procyon Corporation &copy; 2010-2026</footer>
 
 <script>
+
 const feed = document.getElementById('main-feed');
 let currentPlan = "NADA";
 let usuarioAtual = JSON.parse(localStorage.getItem("usuarioAtual")) || null;
@@ -408,10 +409,53 @@ function abrirJogos() {
 }
 
 function abrirCatalogo() {
-    feed.innerHTML = `<h2>Catálogo</h2>
-    <div class="filter-box"><b>Categoria:</b> [ Todos ] [ Chapéus ] [ Camisas ] [ Calças ] [ Rostos ]</div>
-    <input type="text" class="search-bar" placeholder="Pesquisar itens...">
-    <div style="text-align:center; padding:40px; border:1px dashed #999;"><p class="large-text">O catálogo está vazio no momento.</p></div>`;
+    feed.innerHTML = `
+        <h2>Catálogo</h2>
+
+        <div class="filter-box">
+            <b>Categoria:</b>
+            <button onclick="mostrarTodosRostos()">Todos</button>
+            <button onclick="mostrarRostos()">Rostos</button>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Pesquisar rostos...">
+
+        <div id="catalogo-itens" class="grid-layout">
+
+            <div class="grid-item">
+                <div style="font-size:40px; margin-bottom:8px;">:)</div>
+                <b>:)</b><br>
+                <small>Grátis</small>
+            </div>
+
+            <div class="grid-item">
+                <div style="font-size:40px; margin-bottom:8px;">:(</div>
+                <b>:(</b><br>
+                <small>Grátis</small>
+            </div>
+
+            <div class="grid-item">
+                <div style="font-size:40px; margin-bottom:8px;">:D</div>
+                <b>:D</b><br>
+                <small>Grátis</small>
+            </div>
+
+            <div class="grid-item">
+                <div style="font-size:40px; margin-bottom:8px;">:P</div>
+                <b>:P</b><br>
+                <small>Grátis</small>
+            </div>
+
+        </div>
+    `;
+}
+
+function mostrarTodosRostos() {
+    abrirCatalogo();
+}
+
+function mostrarRostos() {
+    abrirCatalogo();
 }
 
 function abrirPessoas() {
@@ -425,33 +469,73 @@ function abrirPessoas() {
 function abrirClub() {
     feed.innerHTML = `
         <h2>Procyon Club</h2>
+
         <div class="club-container">
-            <div class="club-card club-nada"><div style="float:right;">Grátis</div><h3>Nada</h3><p>1 jogo ativo | 5 SNX / 10 TIX diários</p></div>
-            <div class="club-card club-basic"><div style="float:right;">100 SNX</div><h3>Basic Club</h3><p>5 jogos ativos | 10 SNX / 50 TIX diários</p><button onclick="assinar('BASIC', 100, 0)">Assinar</button></div>
-            <div class="club-card club-turbo"><div style="float:right;">1000 SNX</div><h3>Turbo Club</h3><p>20 jogos ativos | 50 SNX / 500 TIX diários</p><button onclick="assinar('TURBO', 1000, 5000)">Assinar</button></div>
-            <div class="club-card club-max"><div style="float:right;">20000 SNX</div><h3>MAX CLUB</h3><p><b>Ilimitado</b> | 500 SNX / 5000 TIX diários</p><button onclick="assinar('MAX', 20000, 10000)">Assinar</button></div>
+
+            <div class="club-card club-nada">
+                <div style="float:right;">Grátis</div>
+                <h3>Nada</h3>
+                <p>1 jogo ativo | 5 SNX / 10 TIX diários</p>
+            </div>
+
+            <div class="club-card club-basic">
+                <div style="float:right;">100 SNX</div>
+                <h3>Basic Club</h3>
+                <p>5 jogos ativos | 10 SNX / 50 TIX diários</p>
+                <button onclick="assinar('BASIC', 100, 0)">Assinar</button>
+            </div>
+
+            <div class="club-card club-turbo">
+                <div style="float:right;">1000 SNX</div>
+                <h3>Turbo Club</h3>
+                <p>20 jogos ativos | 50 SNX / 500 TIX diários</p>
+                <button onclick="assinar('TURBO', 1000, 5000)">Assinar</button>
+            </div>
+
+            <div class="club-card club-max">
+                <div style="float:right;">20000 SNX</div>
+                <h3>MAX CLUB</h3>
+                <p><b>Ilimitado</b> | 500 SNX / 5000 TIX diários</p>
+                <button onclick="assinar('MAX', 20000, 10000)">Assinar</button>
+            </div>
+
         </div>`;
 }
 
 function abrirParentes() {
     feed.innerHTML = `<h2>Guia para Parentes</h2>
     <div class="large-text" style="background:white; padding:20px; border:1px solid #333;">
-        <h4>O que é o Procyon?</h4><p>O Procyon é um mundo virtual focado em criatividade e educação.</p>
-        <h4>Segurança</h4><p>Contamos com sistemas de filtragem de chat e moderação para garantir uma experiência saudável.</p>
-        <h4>Educação</h4><p>Ao criar mundos, os usuários aprendem noções básicas de lógica e design.</p>
+
+        <h4>O que é o Procyon?</h4>
+        <p>O Procyon é um mundo virtual focado em criatividade e educação.</p>
+
+        <h4>Segurança</h4>
+        <p>Contamos com sistemas de filtragem de chat e moderação para garantir uma experiência saudável.</p>
+
+        <h4>Educação</h4>
+        <p>Ao criar mundos, os usuários aprendem noções básicas de lógica e design.</p>
+
     </div>`;
 }
 
 function abrirForum() {
-    feed.innerHTML = `<h2>Fórum</h2><p class="large-text">O fórum está em manutenção. Volte logo!</p>`;
+    feed.innerHTML = `<h2>Fórum</h2>
+    <p class="large-text">O fórum está em manutenção. Volte logo!</p>`;
 }
 
 function abrirNoticias() {
-    feed.innerHTML = `<h2>Notícias</h2><p class="large-text">• Lançamento da v1.0 oficial!<br>• Novas ferramentas de construção em breve.</p>`;
+    feed.innerHTML = `<h2>Notícias</h2>
+    <p class="large-text">
+        • Lançamento da v1.0 oficial!<br>
+        • Novas ferramentas de construção em breve.
+    </p>`;
 }
 
 function abrirAjuda() {
-    feed.innerHTML = `<h2>Ajuda & Suporte</h2><p class="large-text">Dúvidas? Mande um e-mail para suporte@procyon.com</p>`;
+    feed.innerHTML = `<h2>Ajuda & Suporte</h2>
+    <p class="large-text">
+        Dúvidas? Mande um e-mail para suporte@procyon.com
+    </p>`;
 }
 
 function atualizarDistintivo() {
@@ -464,20 +548,23 @@ function atualizarDistintivo() {
     if (currentPlan === "BASIC") {
         badge.innerText = "[Basic Club]";
         badge.style.backgroundColor = "#00CC00";
+
     } else if (currentPlan === "TURBO") {
         badge.innerText = "[Turbo Club]";
         badge.style.backgroundColor = "#1A73E8";
+
     } else if (currentPlan === "MAX") {
         badge.innerText = "[MAX CLUB]";
         badge.style.backgroundColor = "#FFD700";
         badge.style.color = "#000";
+
     } else {
         badge.innerText = "[Membro]";
         badge.style.backgroundColor = "#999";
     }
 }
 
-    if (usuarioAtual) {
+if (usuarioAtual) {
     document.getElementById('login-section').style.display = 'none';
     document.getElementById('user-info').style.display = 'block';
 
@@ -492,6 +579,7 @@ function atualizarDistintivo() {
 
     atualizarDistintivo();
 }
+
 async function fazerLogin() {
     const nome = document.getElementById('user-in').value.trim();
     const senha = document.getElementById('senha-in').value;
@@ -521,7 +609,11 @@ async function fazerLogin() {
         }
 
         usuarioAtual = dados.usuario;
-        localStorage.setItem("usuarioAtual", JSON.stringify(usuarioAtual));
+
+        localStorage.setItem(
+            "usuarioAtual",
+            JSON.stringify(usuarioAtual)
+        );
 
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('user-info').style.display = 'block';
@@ -634,13 +726,6 @@ function iniciarEngine() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    window.onresize = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        ground.y = canvas.height - 100;
-        ground.width = canvas.width;
-    };
-
     const player = {
         x: 100,
         y: 100,
@@ -658,6 +743,14 @@ function iniciarEngine() {
         y: canvas.height - 100,
         width: canvas.width,
         height: 100
+    };
+
+    window.onresize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        ground.y = canvas.height - 100;
+        ground.width = canvas.width;
     };
 
     let fps = 0;
@@ -691,10 +784,13 @@ function iniciarEngine() {
     }
 
     function update() {
+
         if (keys["a"]) {
             player.velX = -player.speed;
+
         } else if (keys["d"]) {
             player.velX = player.speed;
+
         } else {
             player.velX = 0;
         }
@@ -725,7 +821,9 @@ function iniciarEngine() {
     }
 
     function draw() {
+
         if (bgImage.complete && bgImage.naturalHeight !== 0) {
+
             ctx.drawImage(
                 bgImage,
                 0,
@@ -733,8 +831,11 @@ function iniciarEngine() {
                 canvas.width,
                 canvas.height
             );
+
         } else {
+
             ctx.fillStyle = "#87CEEB";
+
             ctx.fillRect(
                 0,
                 0,
@@ -744,6 +845,7 @@ function iniciarEngine() {
         }
 
         ctx.fillStyle = "green";
+
         ctx.fillRect(
             ground.x,
             ground.y,
@@ -752,6 +854,7 @@ function iniciarEngine() {
         );
 
         ctx.fillStyle = "#7F8C8D";
+
         ctx.fillRect(
             player.x,
             player.y,
@@ -809,6 +912,7 @@ function iniciarEngine() {
 
     gameLoop();
 }
+
 </script>
 
 </body>
