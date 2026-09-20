@@ -805,7 +805,7 @@
 
     <div
         class="logo-text"
-        onclick="window.location.reload()"
+        onclick="irPara('/')"
     >
         Procyon
     </div>
@@ -828,15 +828,15 @@
 
 <nav class="nav-bar" id="web-nav">
 
-    <a onclick="window.location.reload()">Início</a>
-    <a onclick="abrirJogos()">Jogos</a>
-    <a onclick="abrirCatalogo()">Catálogo</a>
-    <a onclick="abrirPessoas()">Pessoas</a>
-    <a onclick="abrirClub()">Procyon Club</a>
-    <a onclick="abrirForum()">Fórum</a>
-    <a onclick="abrirNoticias()">Notícias</a>
-    <a onclick="abrirParentes()">Parentes</a>
-    <a onclick="abrirAjuda()">Ajuda</a>
+    <a onclick="irPara('/')">Início</a>
+    <a onclick="irPara('/jogos')">Jogos</a>
+    <a onclick="irPara('/catalogo')">Catálogo</a>
+    <a onclick="irPara('/pessoas')">Pessoas</a>
+    <a onclick="irPara('/club')">Procyon Club</a>
+    <a onclick="irPara('/forum')">Fórum</a>
+    <a onclick="irPara('/noticias')">Notícias</a>
+    <a onclick="irPara('/parentes')">Parentes</a>
+    <a onclick="irPara('/ajuda')">Ajuda</a>
 
 </nav>
 
@@ -895,8 +895,8 @@
             <br>
 
             <a
-                href="javascript:void(0)"
-                onclick="fazerLogout()"
+                href="#"
+                onclick="fazerLogout(); return false;"
                 style="color:red; font-size:11px;"
             >
                 [Sair]
@@ -909,13 +909,19 @@
         <ul>
 
             <li>
-                <a href="#" onclick="abrirPerfil(); return false;">
+                <a
+                    href="/Procyon/perfil"
+                    onclick="irPara('/perfil'); return false;"
+                >
                     Meu Perfil
                 </a>
             </li>
 
             <li>
-                <a href="#" onclick="abrirAvatar(); return false;">
+                <a
+                    href="/Procyon/avatar"
+                    onclick="irPara('/avatar'); return false;"
+                >
                     Meu Avatar
                 </a>
             </li>
@@ -944,7 +950,7 @@
 
             <div
                 class="btn-play"
-                onclick="abrirJogos()"
+                onclick="irPara('/jogos')"
             >
                 JOGAR AGORA!
             </div>
@@ -984,7 +990,7 @@
             </div>
 
             <button
-                onclick="abrirAvatar()"
+                onclick="irPara('/avatar')"
                 style="width:100%; margin-top:10px; padding:8px; font-weight:bold;"
             >
                 Editar Avatar
@@ -1021,6 +1027,225 @@ const API = "http://localhost:3000";
 const bgImage = new Image();
 
 bgImage.src = "fundo.png";
+
+/* =========================================================
+   SISTEMA DE ROTAS
+   ========================================================= */
+
+const BASE_PATH = "/Procyon";
+
+let carregandoRota = false;
+
+function normalizarRota(path) {
+    let rota = path || "/";
+
+    if (rota.startsWith(BASE_PATH)) {
+        rota = rota.slice(BASE_PATH.length);
+    }
+
+    if (!rota) {
+        rota = "/";
+    }
+
+    if (rota.length > 1 && rota.endsWith("/")) {
+        rota = rota.slice(0, -1);
+    }
+
+    return rota;
+}
+
+function irPara(path) {
+    const rota = path.startsWith("/")
+        ? path
+        : "/" + path;
+
+    history.pushState(
+        {},
+        "",
+        BASE_PATH + (
+            rota === "/"
+            ? "/"
+            : rota
+        )
+    );
+
+    carregarRota();
+}
+
+function carregarRota() {
+    if (carregandoRota) return;
+
+    carregandoRota = true;
+
+    const rota = normalizarRota(
+        window.location.pathname
+    );
+
+    try {
+
+        if (rota === "/") {
+            mostrarInicio(false);
+
+        } else if (rota === "/jogos") {
+            abrirJogos(false);
+
+        } else if (
+            rota === "/catalogo"
+        ) {
+            abrirCatalogo(false);
+
+        } else if (
+            rota === "/catalogo/rostos"
+        ) {
+            abrirCatalogo(false);
+
+        } else if (
+            rota === "/catalogo/acessorios"
+        ) {
+            mostrarAcessorios(false);
+
+        } else if (
+            rota.startsWith("/catalogo/rosto/")
+        ) {
+            const id =
+                rota.split("/").pop();
+
+            abrirRosto(id, false);
+
+        } else if (
+            rota.startsWith("/catalogo/acessorio/")
+        ) {
+            const id =
+                rota.split("/").pop();
+
+            abrirAcessorio(id, false);
+
+        } else if (rota === "/pessoas") {
+            abrirPessoas(false);
+
+        } else if (rota === "/club") {
+            abrirClub(false);
+
+        } else if (rota === "/forum") {
+            abrirForum(false);
+
+        } else if (rota === "/noticias") {
+            abrirNoticias(false);
+
+        } else if (rota === "/parentes") {
+            abrirParentes(false);
+
+        } else if (rota === "/ajuda") {
+            abrirAjuda(false);
+
+        } else if (rota === "/perfil") {
+            abrirPerfil(false);
+
+        } else if (rota === "/avatar") {
+            abrirAvatar(false);
+
+        } else {
+            mostrar404(false);
+        }
+
+    } finally {
+        carregandoRota = false;
+    }
+}
+
+window.addEventListener(
+    "popstate",
+    carregarRota
+);
+
+function definirRota(path) {
+    if (carregandoRota) return;
+
+    const rotaAtual =
+        normalizarRota(
+            window.location.pathname
+        );
+
+    if (rotaAtual === path) {
+        return;
+    }
+
+    history.pushState(
+        {},
+        "",
+        BASE_PATH + (
+            path === "/"
+            ? "/"
+            : path
+        )
+    );
+}
+
+function mostrarInicio() {
+    feed.innerHTML = `
+        <div style="text-align:center;">
+
+            <h2>
+                Bem-vindo ao Procyon!
+            </h2>
+
+            <p class="large-text">
+                Crie, jogue e explore com seus amigos.
+            </p>
+
+            <div
+                class="btn-play"
+                onclick="irPara('/jogos')"
+            >
+                JOGAR AGORA!
+            </div>
+
+        </div>
+
+        <div
+            class="card"
+            style="text-align:left; margin-top:30px;"
+        >
+
+            <h4>Novidades</h4>
+
+            <p class="large-text">
+                • Novos rostos adicionados ao catálogo!
+            </p>
+
+            <p class="large-text">
+                • Sistema de avatar atualizado.
+            </p>
+
+        </div>
+    `;
+}
+
+function mostrar404() {
+    feed.innerHTML = `
+        <div style="text-align:center;">
+
+            <h2>
+                Página não encontrada
+            </h2>
+
+            <p class="large-text">
+                Essa página não existe no Procyon.
+            </p>
+
+            <button
+                onclick="irPara('/')"
+                style="
+                    padding:10px 20px;
+                    font-weight:bold;
+                "
+            >
+                Voltar ao início
+            </button>
+
+        </div>
+    `;
+}
 
 const rostos = [
     {
@@ -1243,13 +1468,23 @@ function obterRostoEquipado() {
     ) || null;
 }
 
-function abrirRosto(id) {
+function abrirRosto(id, atualizarURL = true) {
     const rosto =
         rostos.find(
             item => item.id === id
         );
 
-    if (!rosto) return;
+    if (!rosto) {
+        mostrar404();
+        return;
+    }
+
+    if (atualizarURL) {
+        definirRota(
+            "/catalogo/rosto/" +
+            rosto.id
+        );
+    }
 
     const possui =
         possuiRosto(id);
@@ -1357,7 +1592,7 @@ function abrirRosto(id) {
 
                 <button
                     class="face-back-button"
-                    onclick="abrirCatalogo()"
+                    onclick="irPara('/catalogo')"
                 >
                     ← Voltar ao Catálogo
                 </button>
@@ -1650,7 +1885,7 @@ function equiparRosto(id) {
 
     atualizarAvatar();
 
-    abrirAvatar();
+    irPara("/avatar");
 }
 
 function equiparAcessorio(id) {
@@ -1681,7 +1916,7 @@ function equiparAcessorio(id) {
 
     atualizarAvatar();
 
-    abrirAvatar();
+    irPara("/avatar");
 }
 
 function atualizarAvatar() {
@@ -1753,7 +1988,11 @@ function atualizarEconomia() {
     }
 }
 
-function abrirAvatar() {
+function abrirAvatar(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/avatar");
+    }
+
     if (!usuarioAtual) {
         feed.innerHTML = `
             <h2>Meu Avatar</h2>
@@ -1882,7 +2121,7 @@ function abrirAvatar() {
                     Você ainda não possui nenhum rosto.
                 </p>
                 <button
-                    onclick="abrirCatalogo()"
+                    onclick="irPara('/catalogo')"
                     style="padding:10px 20px; font-weight:bold;"
                 >
                     Ir para o Catálogo
@@ -1909,7 +2148,7 @@ function abrirAvatar() {
                     Você ainda não possui nenhum acessório.
                 </p>
                 <button
-                    onclick="mostrarAcessorios()"
+                    onclick="irPara('/catalogo/acessorios')"
                     style="padding:10px 20px; font-weight:bold;"
                 >
                     Ir para os Acessórios
@@ -2007,7 +2246,11 @@ function abrirAvatar() {
     `;
 }
 
-function abrirPerfil() {
+function abrirPerfil(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/perfil");
+    }
+
     if (!usuarioAtual) {
         feed.innerHTML = `
             <h2>Meu Perfil</h2>
@@ -2088,7 +2331,7 @@ function abrirPerfil() {
                 </p>
 
                 <button
-                    onclick="abrirCatalogo()"
+                    onclick="irPara('/catalogo')"
                     style="padding:8px 15px; font-weight:bold;"
                 >
                     Explorar Catálogo
@@ -2241,7 +2484,7 @@ function fazerLogout() {
 
     atualizarAvatar();
 
-    window.location.reload();
+    irPara("/");
 }
 
 function fecharModal() {
@@ -2256,7 +2499,11 @@ function abrirModal() {
     ).style.display = "block";
 }
 
-function abrirJogos() {
+function abrirJogos(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/jogos");
+    }
+
     feed.innerHTML = `
         <h2>Jogos</h2>
 
@@ -2325,7 +2572,11 @@ function abrirJogos() {
     `;
 }
 
-function abrirCatalogo() {
+function abrirCatalogo(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/catalogo");
+    }
+
     let itens = "";
 
     rostos.forEach(rosto => {
@@ -2385,19 +2636,19 @@ function abrirCatalogo() {
             <b>Categoria:</b>
 
             <button
-                onclick="mostrarTodosRostos()"
+                onclick="irPara('/catalogo')"
             >
                 Todos
             </button>
 
             <button
-                onclick="mostrarRostos()"
+                onclick="irPara('/catalogo/rostos')"
             >
                 Rostos
             </button>
 
             <button
-                onclick="mostrarAcessorios()"
+                onclick="irPara('/catalogo/acessorios')"
             >
                 Acessórios
             </button>
@@ -2422,7 +2673,11 @@ function abrirCatalogo() {
     `;
 }
 
-function mostrarAcessorios() {
+function mostrarAcessorios(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/catalogo/acessorios");
+    }
+
     let itens = "";
 
     acessorios.forEach(acessorio => {
@@ -2486,19 +2741,19 @@ function mostrarAcessorios() {
             <b>Categoria:</b>
 
             <button
-                onclick="mostrarTodosRostos()"
+                onclick="irPara('/catalogo')"
             >
                 Todos
             </button>
 
             <button
-                onclick="mostrarRostos()"
+                onclick="irPara('/catalogo/rostos')"
             >
                 Rostos
             </button>
 
             <button
-                onclick="mostrarAcessorios()"
+                onclick="irPara('/catalogo/acessorios')"
             >
                 Acessórios
             </button>
@@ -2523,13 +2778,23 @@ function mostrarAcessorios() {
     `;
 }
 
-function abrirAcessorio(id) {
+function abrirAcessorio(id, atualizarURL = true) {
     const acessorio =
         acessorios.find(
             item => item.id === id
         );
 
-    if (!acessorio) return;
+    if (!acessorio) {
+        mostrar404();
+        return;
+    }
+
+    if (atualizarURL) {
+        definirRota(
+            "/catalogo/acessorio/" +
+            acessorio.id
+        );
+    }
 
     const possui =
         possuiAcessorio(id);
@@ -2611,7 +2876,7 @@ function abrirAcessorio(id) {
 
                 <button
                     class="face-back-button"
-                    onclick="mostrarAcessorios()"
+                    onclick="irPara('/catalogo/acessorios')"
                 >
                     ← Voltar ao Catálogo
                 </button>
@@ -2645,14 +2910,18 @@ function filtrarCatalogo(texto) {
 }
 
 function mostrarTodosRostos() {
-    abrirCatalogo();
+    irPara("/catalogo");
 }
 
 function mostrarRostos() {
-    abrirCatalogo();
+    irPara("/catalogo/rostos");
 }
 
-function abrirPessoas() {
+function abrirPessoas(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/pessoas");
+    }
+
     feed.innerHTML = `
         <h2>Pessoas</h2>
 
@@ -2687,7 +2956,11 @@ function abrirPessoas() {
     `;
 }
 
-function abrirClub() {
+function abrirClub(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/club");
+    }
+
     feed.innerHTML = `
         <h2>Procyon Club</h2>
 
@@ -2757,7 +3030,11 @@ function abrirClub() {
     `;
 }
 
-function abrirParentes() {
+function abrirParentes(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/parentes");
+    }
+
     feed.innerHTML = `
         <h2>Guia para Parentes</h2>
 
@@ -2802,7 +3079,11 @@ function abrirParentes() {
     `;
 }
 
-function abrirForum() {
+function abrirForum(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/forum");
+    }
+
     feed.innerHTML = `
         <h2>Fórum</h2>
 
@@ -2813,7 +3094,11 @@ function abrirForum() {
     `;
 }
 
-function abrirNoticias() {
+function abrirNoticias(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/noticias");
+    }
+
     feed.innerHTML = `
         <h2>Notícias</h2>
 
@@ -2824,7 +3109,11 @@ function abrirNoticias() {
     `;
 }
 
-function abrirAjuda() {
+function abrirAjuda(atualizarURL = true) {
+    if (atualizarURL) {
+        definirRota("/ajuda");
+    }
+
     feed.innerHTML = `
         <h2>
             Ajuda & Suporte
@@ -3391,6 +3680,12 @@ function iniciarEngine() {
 
     gameLoop();
 }
+
+/* =========================================================
+   CARREGA A PÁGINA CORRESPONDENTE À URL ATUAL
+   ========================================================= */
+
+carregarRota();
 </script>
 
 </body>
