@@ -477,6 +477,21 @@ function atualizarDistintivo() {
     }
 }
 
+    if (usuarioAtual) {
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('user-info').style.display = 'block';
+
+    document.getElementById('u-name').innerText =
+        usuarioAtual.username;
+
+    document.getElementById('snx-val').innerText =
+        usuarioAtual.snx;
+
+    document.getElementById('tix-val').innerText =
+        usuarioAtual.tix;
+
+    atualizarDistintivo();
+}
 async function fazerLogin() {
     const nome = document.getElementById('user-in').value.trim();
     const senha = document.getElementById('senha-in').value;
@@ -506,6 +521,7 @@ async function fazerLogin() {
         }
 
         usuarioAtual = dados.usuario;
+        localStorage.setItem("usuarioAtual", JSON.stringify(usuarioAtual));
 
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('user-info').style.display = 'block';
