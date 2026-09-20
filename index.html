@@ -380,14 +380,20 @@
 <script>
 const feed = document.getElementById('main-feed');
 let currentPlan = "NADA";
-let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let usuarioAtual = null;
+
+const API = "http://localhost:3000";
 
 const bgImage = new Image();
 bgImage.src = 'fundo.png';
 
-function fecharModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-function abrirModal() { document.getElementById('modal-overlay').style.display = 'block'; }
+function fecharModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+}
+
+function abrirModal() {
+    document.getElementById('modal-overlay').style.display = 'block';
+}
 
 function abrirJogos() {
     feed.innerHTML = `<h2>Jogos</h2>
@@ -436,51 +442,154 @@ function abrirParentes() {
     </div>`;
 }
 
-function abrirForum() { feed.innerHTML = `<h2>Fórum</h2><p class="large-text">O fórum está em manutenção. Volte logo!</p>`; }
-function abrirNoticias() { feed.innerHTML = `<h2>Notícias</h2><p class="large-text">• Lançamento da v1.0 oficial!<br>• Novas ferramentas de construção em breve.</p>`; }
-function abrirAjuda() { feed.innerHTML = `<h2>Ajuda & Suporte</h2><p class="large-text">Dúvidas? Mande um e-mail para suporte@procyon.com</p>`; }
+function abrirForum() {
+    feed.innerHTML = `<h2>Fórum</h2><p class="large-text">O fórum está em manutenção. Volte logo!</p>`;
+}
+
+function abrirNoticias() {
+    feed.innerHTML = `<h2>Notícias</h2><p class="large-text">• Lançamento da v1.0 oficial!<br>• Novas ferramentas de construção em breve.</p>`;
+}
+
+function abrirAjuda() {
+    feed.innerHTML = `<h2>Ajuda & Suporte</h2><p class="large-text">Dúvidas? Mande um e-mail para suporte@procyon.com</p>`;
+}
 
 function atualizarDistintivo() {
     const badge = document.getElementById('user-badge');
-    if(!badge) return;
+
+    if (!badge) return;
+
     badge.style.display = "inline-block";
-    if(currentPlan === "BASIC") { badge.innerText = "[Basic Club]"; badge.style.backgroundColor = "#00CC00"; }
-    else if(currentPlan === "TURBO") { badge.innerText = "[Turbo Club]"; badge.style.backgroundColor = "#1A73E8"; }
-    else if(currentPlan === "MAX") { badge.innerText = "[MAX CLUB]"; badge.style.backgroundColor = "#FFD700"; badge.style.color = "#000"; }
-    else { badge.innerText = "[Membro]"; badge.style.backgroundColor = "#999"; }
+
+    if (currentPlan === "BASIC") {
+        badge.innerText = "[Basic Club]";
+        badge.style.backgroundColor = "#00CC00";
+    } else if (currentPlan === "TURBO") {
+        badge.innerText = "[Turbo Club]";
+        badge.style.backgroundColor = "#1A73E8";
+    } else if (currentPlan === "MAX") {
+        badge.innerText = "[MAX CLUB]";
+        badge.style.backgroundColor = "#FFD700";
+        badge.style.color = "#000";
+    } else {
+        badge.innerText = "[Membro]";
+        badge.style.backgroundColor = "#999";
+    }
 }
 
-function fazerLogin() {
+async function fazerLogin() {
     const nome = document.getElementById('user-in').value.trim();
     const senha = document.getElementById('senha-in').value;
-    const conta = contas.find(c => c.usuario === nome && c.senha === senha);
-    if(!conta) { alert("Usuário ou senha incorretos!"); return; }
-    usuarioAtual = conta;
-    document.getElementById('login-section').style.display = 'none';
-    document.getElementById('user-info').style.display = 'block';
-    document.getElementById('u-name').innerText = conta.usuario;
-    document.getElementById('snx-val').innerText = conta.snx;
-    document.getElementById('tix-val').innerText = conta.tix;
-    currentPlan = conta.club;
-    atualizarDistintivo();
-    alert("Bem-vindo ao Procyon!");
+
+    if (!nome || !senha) {
+        alert("Digite seu usuário e senha!");
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`${API}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: nome,
+                password: senha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            alert(dados.erro || "Erro ao fazer login.");
+            return;
+        }
+
+        usuarioAtual = dados.usuario;
+
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('user-info').style.display = 'block';
+
+        document.getElementById('u-name').innerText =
+            usuarioAtual.username;
+
+        document.getElementById('snx-val').innerText =
+            usuarioAtual.snx;
+
+        document.getElementById('tix-val').innerText =
+            usuarioAtual.tix;
+
+        currentPlan = "NADA";
+
+        atualizarDistintivo();
+
+        alert("Bem-vindo ao Procyon!");
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Não foi possível conectar ao servidor Procyon.");
+    }
 }
 
-function criarConta() {
+async function criarConta() {
     const nome = document.getElementById('user-in').value.trim();
     const senha = document.getElementById('senha-in').value;
-    if(nome.length < 3 || nome.length > 20 || senha.length < 3 || senha.length > 20) { alert("Usuário/Senha devem ter entre 3 e 20 caracteres!"); return; }
-    if(!/^[a-zA-Z0-9_]+$/.test(nome)) { alert("O usuário só pode conter letras, números e _"); return; }
-    if(contas.find(c => c.usuario === nome)) { alert("Esse usuário já existe!"); return; }
-    contas.push({ usuario: nome, senha: senha, snx: 5000, tix: 6000, club: "NADA" });
-    localStorage.setItem("contas", JSON.stringify(contas));
-    alert("Conta criada com sucesso!");
+
+    if (
+        nome.length < 3 ||
+        nome.length > 20 ||
+        senha.length < 3 ||
+        senha.length > 20
+    ) {
+        alert("Usuário/Senha devem ter entre 3 e 20 caracteres!");
+        return;
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(nome)) {
+        alert("O usuário só pode conter letras, números e _");
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`${API}/cadastro`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: nome,
+                password: senha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            alert(dados.erro || "Erro ao criar conta.");
+            return;
+        }
+
+        alert("Conta criada com sucesso!");
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Não foi possível conectar ao servidor Procyon.");
+    }
 }
 
 function mudarCorAvatar() {
-    const cores = ['#CC0000', '#00CC00', '#FFCC00', '#0000CC', '#6E99C9'];
-    document.getElementById('av-box').style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
+    const cores = [
+        '#CC0000',
+        '#00CC00',
+        '#FFCC00',
+        '#0000CC',
+        '#6E99C9'
+    ];
+
+    document.getElementById('av-box').style.backgroundColor =
+        cores[Math.floor(Math.random() * cores.length)];
 }
+
 
 // ==========================================
 // GAME ENGINE - TELA CHEIA & QUADRADO
@@ -490,17 +599,15 @@ let gameLoopId;
 
 function jogarNaWeb() {
     fecharModal();
-    
-    // Esconde absolutamente toda a interface do site
+
     document.getElementById('web-logo').style.display = 'none';
     document.getElementById('web-economy').style.display = 'none';
     document.getElementById('web-nav').style.display = 'none';
     document.getElementById('website-content').style.display = 'none';
     document.getElementById('web-footer').style.display = 'none';
-    
-    // Mostra a área do canvas
+
     document.getElementById('game-area').style.display = 'block';
-    
+
     iniciarEngine();
 }
 
@@ -508,11 +615,9 @@ function iniciarEngine() {
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    // Redimensiona o canvas para preencher o navegador inteiro
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Atualiza o tamanho se o usuário mexer na janela
     window.onresize = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -520,7 +625,6 @@ function iniciarEngine() {
         ground.width = canvas.width;
     };
 
-    // Personagem redefinido como um Quadrado Cinza Perfeito (50x50)
     const player = {
         x: 100,
         y: 100,
@@ -540,80 +644,150 @@ function iniciarEngine() {
         height: 100
     };
 
-    let fps = 0, frames = 0, lastTime = performance.now();
+    let fps = 0;
+    let frames = 0;
+    let lastTime = performance.now();
+
     const keys = {};
 
-    document.onkeydown = (e) => { 
-        keys[e.key.toLowerCase()] = true; 
-        // Se apertar Esc, fecha o jogo e recarrega o site
-        if(e.key === "Escape") { window.location.reload(); }
+    document.onkeydown = (e) => {
+        keys[e.key.toLowerCase()] = true;
+
+        if (e.key === "Escape") {
+            window.location.reload();
+        }
     };
-    document.onkeyup = (e) => { keys[e.key.toLowerCase()] = false; };
+
+    document.onkeyup = (e) => {
+        keys[e.key.toLowerCase()] = false;
+    };
 
     function atualizarFPS() {
         frames++;
+
         const agora = performance.now();
-        if(agora - lastTime >= 1000) { fps = frames; frames = 0; lastTime = agora; }
+
+        if (agora - lastTime >= 1000) {
+            fps = frames;
+            frames = 0;
+            lastTime = agora;
+        }
     }
 
     function update() {
-        if(keys["a"]) player.velX = -player.speed;
-        else if(keys["d"]) player.velX = player.speed;
-        else player.velX = 0;
+        if (keys["a"]) {
+            player.velX = -player.speed;
+        } else if (keys["d"]) {
+            player.velX = player.speed;
+        } else {
+            player.velX = 0;
+        }
 
-        if((keys[" "] || keys["w"]) && player.onGround) {
+        if ((keys[" "] || keys["w"]) && player.onGround) {
             player.velY = -player.jumpPower;
             player.onGround = false;
         }
 
-        player.velY += 0.7; // Gravidade
+        player.velY += 0.7;
+
         player.x += player.velX;
         player.y += player.velY;
 
-        if(player.y + player.height >= ground.y) {
+        if (player.y + player.height >= ground.y) {
             player.y = ground.y - player.height;
             player.velY = 0;
             player.onGround = true;
         }
 
-        if(player.x < 0) player.x = 0;
-        if(player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+        if (player.x < 0) {
+            player.x = 0;
+        }
+
+        if (player.x + player.width > canvas.width) {
+            player.x = canvas.width - player.width;
+        }
     }
 
     function draw() {
-        // Renderiza o fundo.png cobrindo a tela cheia
         if (bgImage.complete && bgImage.naturalHeight !== 0) {
-            ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(
+                bgImage,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
         } else {
             ctx.fillStyle = "#87CEEB";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
         }
 
-        // Chão verde
         ctx.fillStyle = "green";
-        ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
+        ctx.fillRect(
+            ground.x,
+            ground.y,
+            ground.width,
+            ground.height
+        );
 
-        // Personagem alterado para Quadrado Cinza Sólido (Bordas escuras)
-        ctx.fillStyle = "#7F8C8D"; 
-        ctx.fillRect(player.x, player.y, player.width, player.height);
+        ctx.fillStyle = "#7F8C8D";
+        ctx.fillRect(
+            player.x,
+            player.y,
+            player.width,
+            player.height
+        );
+
         ctx.strokeStyle = "#34495E";
         ctx.lineWidth = 3;
-        ctx.strokeRect(player.x, player.y, player.width, player.height);
 
-        // FPS e Instrução para sair
+        ctx.strokeRect(
+            player.x,
+            player.y,
+            player.width,
+            player.height
+        );
+
         ctx.fillStyle = "black";
         ctx.font = "bold 16px Arial";
-        ctx.fillText("FPS: " + fps, 20, 30);
-        ctx.fillText("Pressione [ESC] para sair", 20, 55);
+
+        ctx.fillText(
+            "FPS: " + fps,
+            20,
+            30
+        );
+
+        ctx.fillText(
+            "Pressione [ESC] para sair",
+            20,
+            55
+        );
+
         ctx.fillStyle = "white";
-        ctx.fillText("FPS: " + fps, 21, 31);
-        ctx.fillText("Pressione [ESC] para sair", 21, 56);
+
+        ctx.fillText(
+            "FPS: " + fps,
+            21,
+            31
+        );
+
+        ctx.fillText(
+            "Pressione [ESC] para sair",
+            21,
+            56
+        );
     }
 
     function gameLoop() {
         atualizarFPS();
         update();
         draw();
+
         gameLoopId = requestAnimationFrame(gameLoop);
     }
 
