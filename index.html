@@ -382,6 +382,7 @@
             font-weight: bold;
             text-shadow: none;
             box-shadow: 5px 5px 0 rgba(0,0,0,0.18);
+            overflow: hidden;
         }
 
         .face-preview span {
@@ -2122,6 +2123,7 @@ function mostrarAcessorios() {
         itens += `
             <div
                 class="grid-item"
+                onclick="abrirAcessorio('${acessorio.id}')"
                 style="cursor:pointer;"
             >
 
@@ -2203,6 +2205,83 @@ function mostrarAcessorios() {
         >
 
             ${itens}
+
+        </div>
+    `;
+}
+
+function abrirAcessorio(id) {
+    const acessorio =
+        acessorios.find(
+            item => item.id === id
+        );
+
+    if (!acessorio) return;
+
+    feed.innerHTML = `
+        <h2>Acessório</h2>
+
+        <div class="face-detail">
+
+            <div class="face-preview">
+
+                <img
+                    src="${acessorio.imagem}"
+                    alt="${acessorio.nome}"
+                    style="
+                        width:260px;
+                        height:260px;
+                        object-fit:contain;
+                    "
+                >
+
+            </div>
+
+            <div class="face-info">
+
+                <h3>
+                    ${acessorio.nome}
+                </h3>
+
+                <div class="face-subtitle">
+                    Acessório do catálogo Procyon
+                </div>
+
+                <div class="face-price">
+                    ${acessorio.preco} SNX
+                </div>
+
+                <div class="face-description">
+
+                    <div class="face-description-title">
+                        Descrição
+                    </div>
+
+                    <p>
+                        ${acessorio.descricao}
+                    </p>
+
+                </div>
+
+                <div class="face-action">
+
+                    <button
+                        class="face-buy-button"
+                        onclick="alert('Sistema de compra de acessórios em breve!')"
+                    >
+                        Comprar por ${acessorio.preco} SNX
+                    </button>
+
+                </div>
+
+                <button
+                    class="face-back-button"
+                    onclick="mostrarAcessorios()"
+                >
+                    ← Voltar ao Catálogo
+                </button>
+
+            </div>
 
         </div>
     `;
