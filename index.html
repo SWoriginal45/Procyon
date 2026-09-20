@@ -969,6 +969,10 @@
             </p>
 
             <p class="large-text">
+                • Novos acessórios adicionados ao catálogo!
+            </p>
+
+            <p class="large-text">
                 • Sistema de avatar atualizado.
             </p>
 
@@ -1013,6 +1017,7 @@
 </footer>
 
 <script>
+
 const feed = document.getElementById("main-feed");
 
 let currentPlan = "NADA";
@@ -1214,6 +1219,10 @@ function mostrarInicio() {
             </p>
 
             <p class="large-text">
+                • Novos acessórios adicionados ao catálogo!
+            </p>
+
+            <p class="large-text">
                 • Sistema de avatar atualizado.
             </p>
 
@@ -1246,6 +1255,10 @@ function mostrar404() {
         </div>
     `;
 }
+
+/* =========================================================
+   ROSTOS
+   ========================================================= */
 
 const rostos = [
     {
@@ -1346,6 +1359,10 @@ const rostos = [
     }
 ];
 
+/* =========================================================
+   ACESSÓRIOS
+   ========================================================= */
+
 const acessorios = [
     {
         id: "chapeu_de_cavalheiro",
@@ -1355,6 +1372,24 @@ const acessorios = [
         imagem: "chapeu_de_cavalheiro.png",
         descricao:
             "Olá homens e mulheres, eu estou me sentindo MUITO elegante hoje!"
+    },
+    {
+        id: "nuvem_depressiva",
+        nome: "Núvem depressiva",
+        preco: 10,
+        tipo: "acessorio",
+        imagem: "nuvem_depressiva.png",
+        descricao:
+            "Mesmo depois da tempestade, ainda existe esperança. Em memória das pessoas e comunidades afetadas pelas enchentes de 2024 no Rio Grande do Sul."
+    },
+    {
+        id: "planta",
+        nome: "Planta",
+        preco: 15,
+        tipo: "acessorio",
+        imagem: "planta.png",
+        descricao:
+            "Eu não sei, só choveu tanto que uma planta cresceu na minha cabeça!"
     }
 ];
 
@@ -1467,6 +1502,10 @@ function obterRostoEquipado() {
             item.id === rostoEquipado
     ) || null;
 }
+
+/* =========================================================
+   PÁGINA DE ROSTO
+   ========================================================= */
 
 function abrirRosto(id, atualizarURL = true) {
     const rosto =
@@ -1603,6 +1642,10 @@ function abrirRosto(id, atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   COMPRAS
+   ========================================================= */
+
 function abrirConfirmacao(id) {
     const rosto =
         rostos.find(
@@ -1709,6 +1752,7 @@ function confirmarCompra() {
     }
 
     if (compraPendenteTipo === "acessorio") {
+
         const acessorio =
             acessorios.find(
                 item =>
@@ -1855,6 +1899,10 @@ function confirmarCompra() {
     abrirRosto(rosto.id);
 }
 
+/* =========================================================
+   EQUIPAMENTO
+   ========================================================= */
+
 function equiparRosto(id) {
     if (!usuarioAtual) {
         alert(
@@ -1919,6 +1967,10 @@ function equiparAcessorio(id) {
     irPara("/avatar");
 }
 
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
 function atualizarAvatar() {
     const avatar =
         document.getElementById(
@@ -1941,6 +1993,7 @@ function atualizarAvatar() {
             ? `<span>${rosto.nome}</span>`
             : `<span>PROCYON</span>`
         }
+
         ${
             acessorio
             ? `
@@ -2030,6 +2083,7 @@ function abrirAvatar(atualizarURL = true) {
                 <div class="catalog-face">
                     ${rosto.nome}
                 </div>
+
                 <b>
                     ${
                         equipado
@@ -2065,6 +2119,7 @@ function abrirAvatar(atualizarURL = true) {
                     }
                 "
             >
+
                 <div
                     style="
                         width:82px;
@@ -2078,6 +2133,7 @@ function abrirAvatar(atualizarURL = true) {
                         overflow:hidden;
                     "
                 >
+
                     <img
                         src="${acessorio.imagem}"
                         alt="${acessorio.nome}"
@@ -2087,11 +2143,15 @@ function abrirAvatar(atualizarURL = true) {
                             object-fit:contain;
                         "
                     >
+
                 </div>
+
                 <b>
                     ${acessorio.nome}
                 </b>
+
                 <br>
+
                 <span>
                     ${
                         equipado
@@ -2099,6 +2159,7 @@ function abrirAvatar(atualizarURL = true) {
                         : "Usar"
                     }
                 </span>
+
             </div>
         `;
     });
@@ -2117,9 +2178,11 @@ function abrirAvatar(atualizarURL = true) {
                 <div style="font-size:40px;">
                     :(
                 </div>
+
                 <p>
                     Você ainda não possui nenhum rosto.
                 </p>
+
                 <button
                     onclick="irPara('/catalogo')"
                     style="padding:10px 20px; font-weight:bold;"
@@ -2141,18 +2204,22 @@ function abrirAvatar(atualizarURL = true) {
                     text-align:center;
                 "
             >
+
                 <div style="font-size:40px;">
                     🎩
                 </div>
+
                 <p>
                     Você ainda não possui nenhum acessório.
                 </p>
+
                 <button
                     onclick="irPara('/catalogo/acessorios')"
                     style="padding:10px 20px; font-weight:bold;"
                 >
                     Ir para os Acessórios
                 </button>
+
             </div>
         `;
     }
@@ -2174,11 +2241,14 @@ function abrirAvatar(atualizarURL = true) {
         <h2>Meu Avatar</h2>
 
         <div class="avatar-editor">
+
             <div
                 class="avatar-editor-preview"
                 style="position:relative;"
             >
+
                 <span>${rostoAtualNome}</span>
+
                 ${
                     acessorioAtual
                     ? `
@@ -2199,16 +2269,20 @@ function abrirAvatar(atualizarURL = true) {
                     `
                     : ""
                 }
+
             </div>
 
             <div>
+
                 <h3 style="margin-top:0;">
                     Seu Avatar
                 </h3>
+
                 <p>
                     Escolha os rostos e acessórios que você possui
                     para usar no seu avatar.
                 </p>
+
                 <p>
                     <b>Rosto atual:</b>
                     ${
@@ -2217,6 +2291,7 @@ function abrirAvatar(atualizarURL = true) {
                         : "Nenhum"
                     }
                 </p>
+
                 <p>
                     <b>Acessório atual:</b>
                     ${
@@ -2225,7 +2300,9 @@ function abrirAvatar(atualizarURL = true) {
                         : "Nenhum"
                     }
                 </p>
+
             </div>
+
         </div>
 
         <h3>
@@ -2245,6 +2322,10 @@ function abrirAvatar(atualizarURL = true) {
         </div>
     `;
 }
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
 
 function abrirPerfil(atualizarURL = true) {
     if (atualizarURL) {
@@ -2277,7 +2358,9 @@ function abrirPerfil(atualizarURL = true) {
     let favoritosHTML = "";
 
     if (favoritosDoUsuario.length) {
+
         favoritosDoUsuario.forEach(item => {
+
             const possui =
                 possuiRosto(item.id);
 
@@ -2312,7 +2395,9 @@ function abrirPerfil(atualizarURL = true) {
                 </div>
             `;
         });
+
     } else {
+
         favoritosHTML = `
             <div
                 style="
@@ -2457,6 +2542,10 @@ function abrirPerfil(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   LOGIN / LOGOUT
+   ========================================================= */
+
 function fazerLogout() {
     usuarioAtual = null;
 
@@ -2498,6 +2587,10 @@ function abrirModal() {
         "modal-overlay"
     ).style.display = "block";
 }
+
+/* =========================================================
+   JOGOS
+   ========================================================= */
 
 function abrirJogos(atualizarURL = true) {
     if (atualizarURL) {
@@ -2572,6 +2665,10 @@ function abrirJogos(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   CATÁLOGO
+   ========================================================= */
+
 function abrirCatalogo(atualizarURL = true) {
     if (atualizarURL) {
         definirRota("/catalogo");
@@ -2580,6 +2677,7 @@ function abrirCatalogo(atualizarURL = true) {
     let itens = "";
 
     rostos.forEach(rosto => {
+
         const possui =
             possuiRosto(rosto.id);
 
@@ -2673,7 +2771,12 @@ function abrirCatalogo(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   ACESSÓRIOS
+   ========================================================= */
+
 function mostrarAcessorios(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/catalogo/acessorios");
     }
@@ -2681,6 +2784,7 @@ function mostrarAcessorios(atualizarURL = true) {
     let itens = "";
 
     acessorios.forEach(acessorio => {
+
         const possui =
             possuiAcessorio(acessorio.id);
 
@@ -2704,6 +2808,7 @@ function mostrarAcessorios(atualizarURL = true) {
                         overflow:hidden;
                     "
                 >
+
                     <img
                         src="${acessorio.imagem}"
                         alt="${acessorio.nome}"
@@ -2713,6 +2818,7 @@ function mostrarAcessorios(atualizarURL = true) {
                             object-fit:contain;
                         "
                     >
+
                 </div>
 
                 <b>
@@ -2779,6 +2885,7 @@ function mostrarAcessorios(atualizarURL = true) {
 }
 
 function abrirAcessorio(id, atualizarURL = true) {
+
     const acessorio =
         acessorios.find(
             item => item.id === id
@@ -2802,6 +2909,7 @@ function abrirAcessorio(id, atualizarURL = true) {
     let botao = "";
 
     if (possui) {
+
         botao = `
             <button
                 class="face-equipped"
@@ -2810,7 +2918,9 @@ function abrirAcessorio(id, atualizarURL = true) {
                 ✓ Você possui este item
             </button>
         `;
+
     } else {
+
         botao = `
             <button
                 class="face-buy-button"
@@ -2819,6 +2929,7 @@ function abrirAcessorio(id, atualizarURL = true) {
                 Comprar por ${acessorio.preco} SNX
             </button>
         `;
+
     }
 
     feed.innerHTML = `
@@ -2878,7 +2989,7 @@ function abrirAcessorio(id, atualizarURL = true) {
                     class="face-back-button"
                     onclick="irPara('/catalogo/acessorios')"
                 >
-                    ← Voltar ao Catálogo
+                    ← Voltar aos Acessórios
                 </button>
 
             </div>
@@ -2887,7 +2998,12 @@ function abrirAcessorio(id, atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   FILTRO
+   ========================================================= */
+
 function filtrarCatalogo(texto) {
+
     const busca =
         texto
         .toLowerCase()
@@ -2899,6 +3015,7 @@ function filtrarCatalogo(texto) {
         );
 
     itens.forEach(item => {
+
         const textoItem =
             item.innerText.toLowerCase();
 
@@ -2917,7 +3034,12 @@ function mostrarRostos() {
     irPara("/catalogo/rostos");
 }
 
+/* =========================================================
+   PESSOAS
+   ========================================================= */
+
 function abrirPessoas(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/pessoas");
     }
@@ -2956,7 +3078,12 @@ function abrirPessoas(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   PROCYON CLUB
+   ========================================================= */
+
 function abrirClub(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/club");
     }
@@ -3030,7 +3157,12 @@ function abrirClub(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   PARENTES
+   ========================================================= */
+
 function abrirParentes(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/parentes");
     }
@@ -3079,7 +3211,12 @@ function abrirParentes(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   FÓRUM
+   ========================================================= */
+
 function abrirForum(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/forum");
     }
@@ -3094,7 +3231,12 @@ function abrirForum(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   NOTÍCIAS
+   ========================================================= */
+
 function abrirNoticias(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/noticias");
     }
@@ -3109,7 +3251,12 @@ function abrirNoticias(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   AJUDA
+   ========================================================= */
+
 function abrirAjuda(atualizarURL = true) {
+
     if (atualizarURL) {
         definirRota("/ajuda");
     }
@@ -3127,7 +3274,12 @@ function abrirAjuda(atualizarURL = true) {
     `;
 }
 
+/* =========================================================
+   DISTINTIVO
+   ========================================================= */
+
 function atualizarDistintivo() {
+
     const badge =
         document.getElementById(
             "user-badge"
@@ -3139,22 +3291,27 @@ function atualizarDistintivo() {
         "inline-block";
 
     if (currentPlan === "BASIC") {
+
         badge.innerText =
             "[Basic Club]";
 
         badge.style.backgroundColor =
             "#00CC00";
+
     } else if (
         currentPlan === "TURBO"
     ) {
+
         badge.innerText =
             "[Turbo Club]";
 
         badge.style.backgroundColor =
             "#1A73E8";
+
     } else if (
         currentPlan === "MAX"
     ) {
+
         badge.innerText =
             "[MAX CLUB]";
 
@@ -3163,7 +3320,9 @@ function atualizarDistintivo() {
 
         badge.style.color =
             "#000";
+
     } else {
+
         badge.innerText =
             "[Membro]";
 
@@ -3175,7 +3334,12 @@ function atualizarDistintivo() {
     }
 }
 
+/* =========================================================
+   USUÁRIO JÁ LOGADO
+   ========================================================= */
+
 if (usuarioAtual) {
+
     document.getElementById(
         "login-section"
     ).style.display =
@@ -3204,7 +3368,12 @@ if (usuarioAtual) {
     atualizarDistintivo();
 }
 
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
 async function fazerLogin() {
+
     const nome =
         document.getElementById(
             "user-in"
@@ -3216,6 +3385,7 @@ async function fazerLogin() {
         ).value;
 
     if (!nome || !senha) {
+
         alert(
             "Digite seu usuário e senha!"
         );
@@ -3224,6 +3394,7 @@ async function fazerLogin() {
     }
 
     try {
+
         const resposta =
             await fetch(
                 `${API}/login`,
@@ -3246,6 +3417,7 @@ async function fazerLogin() {
             await resposta.json();
 
         if (!resposta.ok) {
+
             alert(
                 dados.erro ||
                 "Erro ao fazer login."
@@ -3300,6 +3472,7 @@ async function fazerLogin() {
         );
 
     } catch (erro) {
+
         console.error(erro);
 
         alert(
@@ -3308,7 +3481,12 @@ async function fazerLogin() {
     }
 }
 
+/* =========================================================
+   CRIAR CONTA
+   ========================================================= */
+
 async function criarConta() {
+
     const nome =
         document.getElementById(
             "user-in"
@@ -3325,6 +3503,7 @@ async function criarConta() {
         senha.length < 3 ||
         senha.length > 20
     ) {
+
         alert(
             "Usuário/Senha devem ter entre 3 e 20 caracteres!"
         );
@@ -3337,6 +3516,7 @@ async function criarConta() {
             nome
         )
     ) {
+
         alert(
             "O usuário só pode conter letras, números e _"
         );
@@ -3345,6 +3525,7 @@ async function criarConta() {
     }
 
     try {
+
         const resposta =
             await fetch(
                 `${API}/cadastro`,
@@ -3367,6 +3548,7 @@ async function criarConta() {
             await resposta.json();
 
         if (!resposta.ok) {
+
             alert(
                 dados.erro ||
                 "Erro ao criar conta."
@@ -3380,6 +3562,7 @@ async function criarConta() {
         );
 
     } catch (erro) {
+
         console.error(erro);
 
         alert(
@@ -3388,11 +3571,20 @@ async function criarConta() {
     }
 }
 
+/* =========================================================
+   INICIALIZAÇÃO DO AVATAR
+   ========================================================= */
+
 atualizarAvatar();
 
 let gameLoopId;
 
+/* =========================================================
+   JOGAR NA WEB
+   ========================================================= */
+
 function jogarNaWeb() {
+
     fecharModal();
 
     document.getElementById(
@@ -3428,7 +3620,12 @@ function jogarNaWeb() {
     iniciarEngine();
 }
 
+/* =========================================================
+   ENGINE
+   ========================================================= */
+
 function iniciarEngine() {
+
     const canvas =
         document.getElementById(
             "gameCanvas"
@@ -3465,6 +3662,7 @@ function iniciarEngine() {
     };
 
     window.onresize = () => {
+
         canvas.width =
             window.innerWidth;
 
@@ -3487,6 +3685,7 @@ function iniciarEngine() {
     const keys = {};
 
     document.onkeydown = e => {
+
         keys[
             e.key.toLowerCase()
         ] = true;
@@ -3499,12 +3698,14 @@ function iniciarEngine() {
     };
 
     document.onkeyup = e => {
+
         keys[
             e.key.toLowerCase()
         ] = false;
     };
 
     function atualizarFPS() {
+
         frames++;
 
         const agora =
@@ -3513,6 +3714,7 @@ function iniciarEngine() {
         if (
             agora - lastTime >= 1000
         ) {
+
             fps = frames;
             frames = 0;
             lastTime = agora;
@@ -3520,13 +3722,19 @@ function iniciarEngine() {
     }
 
     function update() {
+
         if (keys["a"]) {
+
             player.velX =
                 -player.speed;
+
         } else if (keys["d"]) {
+
             player.velX =
                 player.speed;
+
         } else {
+
             player.velX = 0;
         }
 
@@ -3534,6 +3742,7 @@ function iniciarEngine() {
             (keys[" "] || keys["w"]) &&
             player.onGround
         ) {
+
             player.velY =
                 -player.jumpPower;
 
@@ -3553,6 +3762,7 @@ function iniciarEngine() {
             player.y + player.height >=
             ground.y
         ) {
+
             player.y =
                 ground.y -
                 player.height;
@@ -3571,6 +3781,7 @@ function iniciarEngine() {
             player.x + player.width >
             canvas.width
         ) {
+
             player.x =
                 canvas.width -
                 player.width;
@@ -3578,10 +3789,12 @@ function iniciarEngine() {
     }
 
     function draw() {
+
         if (
             bgImage.complete &&
             bgImage.naturalHeight !== 0
         ) {
+
             ctx.drawImage(
                 bgImage,
                 0,
@@ -3589,7 +3802,9 @@ function iniciarEngine() {
                 canvas.width,
                 canvas.height
             );
+
         } else {
+
             ctx.fillStyle =
                 "#87CEEB";
 
@@ -3668,6 +3883,7 @@ function iniciarEngine() {
     }
 
     function gameLoop() {
+
         atualizarFPS();
         update();
         draw();
@@ -3682,10 +3898,11 @@ function iniciarEngine() {
 }
 
 /* =========================================================
-   CARREGA A PÁGINA CORRESPONDENTE À URL ATUAL
+   CARREGA A ROTA ATUAL
    ========================================================= */
 
 carregarRota();
+
 </script>
 
 </body>
