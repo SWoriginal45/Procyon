@@ -380,7 +380,7 @@
 <script>
 const feed = document.getElementById('main-feed');
 let currentPlan = "NADA";
-let usuarioAtual = null;
+let usuarioAtual = JSON.parse(localStorage.getItem("usuarioAtual")) || null;
 
 const API = "http://localhost:3000";
 
