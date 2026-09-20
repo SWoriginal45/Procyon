@@ -1138,6 +1138,11 @@ let inventario =
         localStorage.getItem("procyonInventario")
     ) || [];
 
+let inventarioAcessorios =
+    JSON.parse(
+        localStorage.getItem("procyonInventarioAcessorios")
+    ) || [];
+
 let rostoEquipado =
     localStorage.getItem(
         "procyonRostoEquipado"
@@ -1149,11 +1154,19 @@ let favoritos =
     ) || [];
 
 let compraPendente = null;
+let compraPendenteTipo = null;
 
 function salvarInventario() {
     localStorage.setItem(
         "procyonInventario",
         JSON.stringify(inventario)
+    );
+}
+
+function salvarInventarioAcessorios() {
+    localStorage.setItem(
+        "procyonInventarioAcessorios",
+        JSON.stringify(inventarioAcessorios)
     );
 }
 
@@ -1173,6 +1186,10 @@ function salvarFavoritos() {
 
 function possuiRosto(id) {
     return inventario.includes(id);
+}
+
+function possuiAcessorio(id) {
+    return inventarioAcessorios.includes(id);
 }
 
 function favoritouRosto(id) {
@@ -1372,6 +1389,7 @@ function abrirConfirmacao(id) {
     }
 
     compraPendente = id;
+    compraPendenteTipo = "rosto";
 
     document.getElementById(
         "confirm-text"
@@ -1383,8 +1401,54 @@ function abrirConfirmacao(id) {
     ).style.display = "block";
 }
 
+function abrirConfirmacaoAcessorio(id) {
+    const acessorio =
+        acessorios.find(
+            item => item.id === id
+        );
+
+    if (!acessorio) return;
+
+    if (!usuarioAtual) {
+        alert(
+            "Você precisa estar logado para comprar itens!"
+        );
+        return;
+    }
+
+    if (possuiAcessorio(id)) {
+        alert(
+            "Você já possui esse acessório!"
+        );
+        return;
+    }
+
+    if (
+        usuarioAtual.snx <
+        acessorio.preco
+    ) {
+        alert(
+            "Você não possui SNX suficiente!"
+        );
+        return;
+    }
+
+    compraPendente = id;
+    compraPendenteTipo = "acessorio";
+
+    document.getElementById(
+        "confirm-text"
+    ).innerText =
+        `Você tem certeza que quer comprar ${acessorio.nome}?`;
+
+    document.getElementById(
+        "confirm-overlay"
+    ).style.display = "block";
+}
+
 function fecharConfirmacao() {
     compraPendente = null;
+    compraPendenteTipo = null;
 
     document.getElementById(
         "confirm-overlay"
@@ -1394,6 +1458,81 @@ function fecharConfirmacao() {
 function confirmarCompra() {
     if (!compraPendente) {
         fecharConfirmacao();
+        return;
+    }
+
+    if (compraPendenteTipo === "acessorio") {
+        const acessorio =
+            acessorios.find(
+                item =>
+                    item.id ===
+                    compraPendente
+            );
+
+        if (!acessorio) {
+            fecharConfirmacao();
+            return;
+        }
+
+        if (!usuarioAtual) {
+            fecharConfirmacao();
+
+            alert(
+                "Você precisa estar logado!"
+            );
+
+            return;
+        }
+
+        if (possuiAcessorio(acessorio.id)) {
+            fecharConfirmacao();
+
+            alert(
+                "Você já possui esse acessório!"
+            );
+
+            abrirAcessorio(acessorio.id);
+
+            return;
+        }
+
+        if (
+            usuarioAtual.snx <
+            acessorio.preco
+        ) {
+            fecharConfirmacao();
+
+            alert(
+                "Você não possui SNX suficiente!"
+            );
+
+            return;
+        }
+
+        usuarioAtual.snx -=
+            acessorio.preco;
+
+        inventarioAcessorios.push(
+            acessorio.id
+        );
+
+        salvarInventarioAcessorios();
+
+        localStorage.setItem(
+            "usuarioAtual",
+            JSON.stringify(usuarioAtual)
+        );
+
+        atualizarEconomia();
+
+        fecharConfirmacao();
+
+        alert(
+            `Você comprou ${acessorio.nome}!`
+        );
+
+        abrirAcessorio(acessorio.id);
+
         return;
     }
 
@@ -2120,6 +2259,9 @@ function mostrarAcessorios() {
     let itens = "";
 
     acessorios.forEach(acessorio => {
+        const possui =
+            possuiAcessorio(acessorio.id);
+
         itens += `
             <div
                 class="grid-item"
@@ -2157,8 +2299,12 @@ function mostrarAcessorios() {
 
                 <br>
 
-                <span class="catalog-status">
-                    ${acessorio.preco} SNX
+                <span class="catalog-status ${possui ? "owned" : ""}">
+                    ${
+                        possui
+                        ? "✓ Você possui"
+                        : acessorio.preco + " SNX"
+                    }
                 </span>
 
             </div>
@@ -2218,6 +2364,31 @@ function abrirAcessorio(id) {
 
     if (!acessorio) return;
 
+    const possui =
+        possuiAcessorio(id);
+
+    let botao = "";
+
+    if (possui) {
+        botao = `
+            <button
+                class="face-equipped"
+                disabled
+            >
+                ✓ Você possui este item
+            </button>
+        `;
+    } else {
+        botao = `
+            <button
+                class="face-buy-button"
+                onclick="abrirConfirmacaoAcessorio('${acessorio.id}')"
+            >
+                Comprar por ${acessorio.preco} SNX
+            </button>
+        `;
+    }
+
     feed.innerHTML = `
         <h2>Acessório</h2>
 
@@ -2248,7 +2419,11 @@ function abrirAcessorio(id) {
                 </div>
 
                 <div class="face-price">
-                    ${acessorio.preco} SNX
+                    ${
+                        possui
+                        ? "Você possui este item"
+                        : acessorio.preco + " SNX"
+                    }
                 </div>
 
                 <div class="face-description">
@@ -2264,14 +2439,7 @@ function abrirAcessorio(id) {
                 </div>
 
                 <div class="face-action">
-
-                    <button
-                        class="face-buy-button"
-                        onclick="alert('Sistema de compra de acessórios em breve!')"
-                    >
-                        Comprar por ${acessorio.preco} SNX
-                    </button>
-
+                    ${botao}
                 </div>
 
                 <button
