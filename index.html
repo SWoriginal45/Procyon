@@ -1006,13 +1006,14 @@
 </footer>
 
 <script>
-
 const feed = document.getElementById("main-feed");
 
 let currentPlan = "NADA";
 
 let usuarioAtual =
-    JSON.parse(localStorage.getItem("usuarioAtual")) || null;
+    JSON.parse(
+        localStorage.getItem("usuarioAtual")
+    ) || null;
 
 const API = "http://localhost:3000";
 
@@ -1116,6 +1117,18 @@ const rostos = [
         favoritos: 66,
         descricao:
             "Um pequeno coração para mostrar carinho por alguém ou simplesmente decorar seu avatar."
+    }
+];
+
+const acessorios = [
+    {
+        id: "chapeu_de_cavalheiro",
+        nome: "Chapéu de Cavalheiro",
+        preco: 25,
+        tipo: "chapeu",
+        imagem: "chapeu_de_cavalheiro.png",
+        descricao:
+            "Olá homens e mulheres, eu estou me sentindo MUITO elegante hoje!"
     }
 ];
 
@@ -2076,12 +2089,111 @@ function abrirCatalogo() {
                 Rostos
             </button>
 
+            <button
+                onclick="mostrarAcessorios()"
+            >
+                Acessórios
+            </button>
+
         </div>
 
         <input
             type="text"
             class="search-bar"
-            placeholder="Pesquisar rostos..."
+            placeholder="Pesquisar itens..."
+            oninput="filtrarCatalogo(this.value)"
+        >
+
+        <div
+            id="catalogo-itens"
+            class="grid-layout"
+        >
+
+            ${itens}
+
+        </div>
+    `;
+}
+
+function mostrarAcessorios() {
+    let itens = "";
+
+    acessorios.forEach(acessorio => {
+        itens += `
+            <div
+                class="grid-item"
+                style="cursor:pointer;"
+            >
+
+                <div
+                    style="
+                        width:82px;
+                        height:82px;
+                        margin:0 auto 8px auto;
+                        background:#EEF4FA;
+                        border:2px solid #333;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        overflow:hidden;
+                    "
+                >
+                    <img
+                        src="${acessorio.imagem}"
+                        alt="${acessorio.nome}"
+                        style="
+                            width:82px;
+                            height:82px;
+                            object-fit:contain;
+                        "
+                    >
+                </div>
+
+                <b>
+                    ${acessorio.nome}
+                </b>
+
+                <br>
+
+                <span class="catalog-status">
+                    ${acessorio.preco} SNX
+                </span>
+
+            </div>
+        `;
+    });
+
+    feed.innerHTML = `
+        <h2>Catálogo</h2>
+
+        <div class="filter-box">
+
+            <b>Categoria:</b>
+
+            <button
+                onclick="mostrarTodosRostos()"
+            >
+                Todos
+            </button>
+
+            <button
+                onclick="mostrarRostos()"
+            >
+                Rostos
+            </button>
+
+            <button
+                onclick="mostrarAcessorios()"
+            >
+                Acessórios
+            </button>
+
+        </div>
+
+        <input
+            type="text"
+            class="search-bar"
+            placeholder="Pesquisar acessórios..."
             oninput="filtrarCatalogo(this.value)"
         >
 
@@ -2865,7 +2977,6 @@ function iniciarEngine() {
 
     gameLoop();
 }
-
 </script>
 
 </body>
