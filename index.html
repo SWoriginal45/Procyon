@@ -3145,6 +3145,15 @@ function mostrarRostos() {
    PESSOAS
    ========================================================= */
 
+function escaparHTML(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function abrirPessoas(atualizarURL = true) {
     if (atualizarURL) definirRota("/pessoas");
 
@@ -3152,7 +3161,7 @@ function abrirPessoas(atualizarURL = true) {
         <h2>Pessoas</h2>
         <p>Pesquise usuários para visitar perfis, seguir pessoas e enviar pedidos de amizade.</p>
         <div class="filter-box">
-            <input id="pesquisa-usuarios" type="text" class="search-bar" placeholder="Nome de usuário..." onkeydown="if(event.key === 'Enter') pesquisarUsuarios()">
+            <input id="pesquisa-usuarios" type="text" class="search-bar" placeholder="Nome de usuário..." maxlength="30" onkeydown="if(event.key === 'Enter') pesquisarUsuarios()">
             <button onclick="pesquisarUsuarios()" style="padding:8px 14px;font-weight:bold;">Pesquisar</button>
         </div>
         <div id="resultados-usuarios" class="grid-layout">
@@ -3164,7 +3173,6 @@ function abrirPessoas(atualizarURL = true) {
 async function pesquisarUsuarios() {
     const campo = document.getElementById("pesquisa-usuarios");
     const resultados = document.getElementById("resultados-usuarios");
-
     if (!campo || !resultados) return;
 
     const busca = campo.value.trim();
@@ -3185,19 +3193,21 @@ async function pesquisarUsuarios() {
     `;
 
     try {
-        const resposta = await fetch(
-            `${API}/usuarios?busca=${encodeURIComponent(busca)}`
-        );
+        const resposta = await fetch(`${API}/usuarios?busca=${encodeURIComponent(busca)}`);
+        const dados = await resposta.json().catch(() => []);
 
-        if (!resposta.ok) throw new Error("Erro na pesquisa");
+        if (!resposta.ok) {
+            throw new Error(dados.erro || "Erro na pesquisa");
+        }
 
-        renderizarUsuarios(await resposta.json(), busca);
+        renderizarUsuarios(Array.isArray(dados) ? dados : [], busca);
     } catch (erro) {
         console.error(erro);
         resultados.innerHTML = `
-            <div style="grid-column:1/-1;padding:20px;text-align:center;">
-                Não foi possível pesquisar usuários.<br>
-                Verifique se o servidor está funcionando.
+            <div style="grid-column:1/-1;padding:20px;text-align:center;background:#FFF;border:1px solid #999;">
+                <div style="font-size:35px;">:(</div>
+                <b>Não foi possível pesquisar usuários.</b><br>
+                <small>Verifique se o servidor está funcionando e tente novamente.</small>
             </div>
         `;
     }
@@ -3212,22 +3222,33 @@ function renderizarUsuarios(usuarios, busca) {
             <div style="grid-column:1/-1;padding:30px;text-align:center;background:#FFF;border:1px solid #999;">
                 <div style="font-size:45px;">:(</div>
                 <h3>Nenhum usuário encontrado</h3>
-                <p>Não existe nenhum usuário chamado <b>${busca}</b>.</p>
+                <p>Não existe nenhum usuário chamado <b>${escaparHTML(busca)}</b>.</p>
                 <small>Tente pesquisar outro nome.</small>
             </div>
         `;
         return;
     }
 
-    resultados.innerHTML = usuarios.map(usuario => `
-        <div class="grid-item">
-            <div style="height:60px;width:60px;margin:0 auto 8px;background:#6E99C9;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:24px;">☺</div>
-            <b>${usuario.username}</b><br>
-            <small>${usuario.display_name || "Membro do Procyon"}</small><br>
-            <button onclick="seguirUsuario(${usuario.id})" style="margin-top:8px;padding:6px;">Seguir</button>
-            <button onclick="enviarAmizade(${usuario.id})" style="margin-top:5px;padding:6px;">Adicionar amigo</button>
-        </div>
-    `).join("");
+    resultados.innerHTML = usuarios.map(usuario => {
+        const id = Number(usuario.id);
+        const username = escaparHTML(usuario.username || "Usuário");
+        const displayName = escaparHTML(usuario.display_name || "Membro do Procyon");
+        const proprioPerfil = usuarioAtual && Number(usuarioAtual.id) === id;
+
+        return `
+            <div class="grid-item">
+                <div style="height:60px;width:60px;margin:0 auto 8px;background:#6E99C9;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:24px;">☺</div>
+                <b>${username}</b><br>
+                <small>${displayName}</small><br>
+                ${proprioPerfil
+                    ? '<small style="display:block;margin-top:8px;">Este é você</small>'
+                    : `
+                        <button onclick="seguirUsuario(${id})" style="margin-top:8px;padding:6px;">Seguir</button>
+                        <button onclick="enviarAmizade(${id})" style="margin-top:5px;padding:6px;">Adicionar amigo</button>
+                    `}
+            </div>
+        `;
+    }).join("");
 }
 
 async function seguirUsuario(alvoId) {
@@ -3238,14 +3259,14 @@ async function seguirUsuario(alvoId) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                seguidor_id: usuarioAtual.id,
+                seguidor_id: Number(usuarioAtual.id),
                 seguido_id: Number(alvoId)
             })
         });
-
-        const dados = await resposta.json();
+        const dados = await resposta.json().catch(() => ({}));
         alert(dados.mensagem || dados.erro || "Erro ao seguir usuário.");
     } catch (erro) {
+        console.error(erro);
         alert("Não foi possível conectar ao servidor.");
     }
 }
@@ -3258,14 +3279,14 @@ async function enviarAmizade(alvoId) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                remetente_id: usuarioAtual.id,
+                remetente_id: Number(usuarioAtual.id),
                 destinatario_id: Number(alvoId)
             })
         });
-
-        const dados = await resposta.json();
+        const dados = await resposta.json().catch(() => ({}));
         alert(dados.mensagem || dados.erro || "Erro ao enviar pedido.");
     } catch (erro) {
+        console.error(erro);
         alert("Não foi possível conectar ao servidor.");
     }
 }
