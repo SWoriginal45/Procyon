@@ -3164,54 +3164,109 @@ function abrirPessoas(atualizarURL = true) {
 async function pesquisarUsuarios() {
     const campo = document.getElementById("pesquisa-usuarios");
     const resultados = document.getElementById("resultados-usuarios");
+
     if (!campo || !resultados) return;
+
     const busca = campo.value.trim();
+
     if (!busca) {
-        resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;">Digite um nome de usuário.</div>';
+        resultados.innerHTML = `
+            <div style="grid-column:1/-1;padding:20px;text-align:center;">
+                Digite um nome de usuário para pesquisar.
+            </div>
+        `;
         return;
     }
-    resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;">Pesquisando...</div>';
+
+    resultados.innerHTML = `
+        <div style="grid-column:1/-1;padding:20px;text-align:center;">
+            Pesquisando usuários...
+        </div>
+    `;
+
     try {
-        const resposta = await fetch(`${API}/usuarios?busca=${encodeURIComponent(busca)}`);
-        if (!resposta.ok) throw new Error();
-        renderizarUsuarios(await resposta.json());
+        const resposta = await fetch(
+            `${API}/usuarios?busca=${encodeURIComponent(busca)}`
+        );
+
+        if (!resposta.ok) throw new Error("Erro na pesquisa");
+
+        renderizarUsuarios(await resposta.json(), busca);
     } catch (erro) {
-        resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;text-align:center;">O servidor ainda precisa da rota /usuarios para realizar a pesquisa.</div>';
+        console.error(erro);
+        resultados.innerHTML = `
+            <div style="grid-column:1/-1;padding:20px;text-align:center;">
+                Não foi possível pesquisar usuários.<br>
+                Verifique se o servidor está funcionando.
+            </div>
+        `;
     }
 }
 
-function renderizarUsuarios(usuarios) {
+function renderizarUsuarios(usuarios, busca) {
     const resultados = document.getElementById("resultados-usuarios");
     if (!resultados) return;
-    if (!Array.isArray(usuarios) || !usuarios.length) {
-        resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;">Nenhum usuário encontrado.</div>';
+
+    if (!Array.isArray(usuarios) || usuarios.length === 0) {
+        resultados.innerHTML = `
+            <div style="grid-column:1/-1;padding:30px;text-align:center;background:#FFF;border:1px solid #999;">
+                <div style="font-size:45px;">:(</div>
+                <h3>Nenhum usuário encontrado</h3>
+                <p>Não existe nenhum usuário chamado <b>${busca}</b>.</p>
+                <small>Tente pesquisar outro nome.</small>
+            </div>
+        `;
         return;
     }
+
     resultados.innerHTML = usuarios.map(usuario => `
         <div class="grid-item">
             <div style="height:60px;width:60px;margin:0 auto 8px;background:#6E99C9;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:24px;">☺</div>
-            <b>${usuario.username || usuario.nome || "Usuário"}</b><br>
-            <button onclick="executarAcaoSocial('/seguir','${usuario.id}','seguir')" style="margin-top:8px;padding:6px;">Seguir</button>
-            <button onclick="executarAcaoSocial('/amizade','${usuario.id}','enviar o pedido de amizade')" style="margin-top:5px;padding:6px;">Adicionar amigo</button>
+            <b>${usuario.username}</b><br>
+            <small>${usuario.display_name || "Membro do Procyon"}</small><br>
+            <button onclick="seguirUsuario(${usuario.id})" style="margin-top:8px;padding:6px;">Seguir</button>
+            <button onclick="enviarAmizade(${usuario.id})" style="margin-top:5px;padding:6px;">Adicionar amigo</button>
         </div>
     `).join("");
 }
 
-async function executarAcaoSocial(rota, alvoId, acao) {
-    if (!usuarioAtual) {
-        alert("Você precisa estar logado!");
-        return;
-    }
+async function seguirUsuario(alvoId) {
+    if (!usuarioAtual) return alert("Você precisa estar logado!");
+
     try {
-        const resposta = await fetch(API + rota, {
+        const resposta = await fetch(`${API}/seguir`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({usuarioId: usuarioAtual.id, alvoId})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                seguidor_id: usuarioAtual.id,
+                seguido_id: Number(alvoId)
+            })
         });
-        if (!resposta.ok) throw new Error();
-        alert("Ação realizada: " + acao + "!");
+
+        const dados = await resposta.json();
+        alert(dados.mensagem || dados.erro || "Erro ao seguir usuário.");
     } catch (erro) {
-        alert("Essa função precisa das rotas sociais no servidor do Procyon.");
+        alert("Não foi possível conectar ao servidor.");
+    }
+}
+
+async function enviarAmizade(alvoId) {
+    if (!usuarioAtual) return alert("Você precisa estar logado!");
+
+    try {
+        const resposta = await fetch(`${API}/amizade`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                remetente_id: usuarioAtual.id,
+                destinatario_id: Number(alvoId)
+            })
+        });
+
+        const dados = await resposta.json();
+        alert(dados.mensagem || dados.erro || "Erro ao enviar pedido.");
+    } catch (erro) {
+        alert("Não foi possível conectar ao servidor.");
     }
 }
 
