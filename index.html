@@ -1064,15 +1064,8 @@ function irPara(path) {
         ? path
         : "/" + path;
 
-    history.pushState(
-        {},
-        "",
-        BASE_PATH + (
-            rota === "/"
-            ? "/"
-            : rota
-        )
-    );
+    window.location.hash =
+        rota === "/" ? "#/" : "#" + rota;
 
     carregarRota();
 }
@@ -1083,7 +1076,9 @@ function carregarRota() {
     carregandoRota = true;
 
     const rota = normalizarRota(
-        window.location.pathname
+        window.location.hash
+            ? window.location.hash.slice(1)
+            : window.location.pathname
     );
 
     try {
@@ -1163,27 +1158,27 @@ window.addEventListener(
     carregarRota
 );
 
+window.addEventListener(
+    "hashchange",
+    carregarRota
+);
+
 function definirRota(path) {
     if (carregandoRota) return;
 
     const rotaAtual =
         normalizarRota(
-            window.location.pathname
+            window.location.hash
+                ? window.location.hash.slice(1)
+                : window.location.pathname
         );
 
     if (rotaAtual === path) {
         return;
     }
 
-    history.pushState(
-        {},
-        "",
-        BASE_PATH + (
-            path === "/"
-            ? "/"
-            : path
-        )
-    );
+    window.location.hash =
+        path === "/" ? "#/" : "#" + path;
 }
 
 function mostrarInicio() {
@@ -2726,6 +2721,44 @@ function abrirCatalogo(atualizarURL = true) {
         `;
     });
 
+    acessorios.forEach(acessorio => {
+        const possui = possuiAcessorio(acessorio.id);
+
+        itens += `
+            <div
+                class="grid-item"
+                onclick="abrirAcessorio('${acessorio.id}')"
+                style="cursor:pointer;"
+            >
+                <div
+                    style="
+                        width:82px;
+                        height:82px;
+                        margin:0 auto 8px auto;
+                        background:#EEF4FA;
+                        border:2px solid #333;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        overflow:hidden;
+                    "
+                >
+                    <img
+                        src="${acessorio.imagem}"
+                        alt="${acessorio.nome}"
+                        style="width:82px;height:82px;object-fit:contain;"
+                    >
+                </div>
+
+                <b>${acessorio.nome}</b>
+                <br>
+                <span class="catalog-status ${possui ? "owned" : ""}">
+                    ${possui ? "✓ Você possui" : acessorio.preco + " SNX"}
+                </span>
+            </div>
+        `;
+    });
+
     feed.innerHTML = `
         <h2>Catálogo</h2>
 
@@ -3576,6 +3609,7 @@ async function criarConta() {
    ========================================================= */
 
 atualizarAvatar();
+carregarRota();
 
 let gameLoopId;
 
