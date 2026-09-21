@@ -1351,6 +1351,62 @@ const rostos = [
         favoritos: 66,
         descricao:
             "Um pequeno coração para mostrar carinho por alguém ou simplesmente decorar seu avatar."
+    },
+    {
+        id: "rosto_gato",
+        nome: ":3",
+        preco: 35,
+        favoritos: 48,
+        descricao:
+            "Um rostinho de gato para quem está sendo fofo, suspeito ou os dois ao mesmo tempo."
+    },
+    {
+        id: "rosto_sobrancelha",
+        nome: "^\\\\_^",
+        preco: 45,
+        favoritos: 31,
+        descricao:
+            "Uma expressão tranquila, estranha e levemente poderosa."
+    },
+    {
+        id: "rosto_neutro",
+        nome: "-_-",
+        preco: 25,
+        favoritos: 22,
+        descricao:
+            "Quando você já viu de tudo e não tem mais reação."
+    },
+    {
+        id: "rosto_suspeito",
+        nome: "ಠ_ಠ",
+        preco: 80,
+        favoritos: 55,
+        descricao:
+            "O olhar de quem está julgando silenciosamente."
+    },
+    {
+        id: "rosto_paz",
+        nome: "uwu",
+        preco: 65,
+        favoritos: 39,
+        descricao:
+            "Uma carinha fofa para momentos extremamente uwu."
+    },
+    {
+        id: "rosto_dormindo",
+        nome: "-.-",
+        preco: 30,
+        favoritos: 18,
+        descricao:
+            "Sem energia, sem palavras e quase dormindo."
+    },
+    {
+        id: "rosto_medo",
+        nome: "D:",
+        preco: 55,
+        favoritos: 26,
+        descricao:
+            "Quando alguma coisa deu muito errado."
     }
 ];
 
@@ -1385,6 +1441,24 @@ const acessorios = [
         imagem: "planta.png",
         descricao:
             "Eu não sei, só choveu tanto que uma planta cresceu na minha cabeça!"
+    },
+    {
+        id: "placa_de_sim",
+        nome: "Placa branca com sim",
+        preco: 5,
+        tipo: "acessorio",
+        imagem: "placa_de_sim.png",
+        descricao:
+            "Ah sim, eu afirmo tudo, menos que seja mentira!"
+    },
+    {
+        id: "cinnamoroll",
+        nome: "Chapeu e orelhinhas da cinnamoroll",
+        preco: 15,
+        tipo: "chapeu",
+        imagem: "cinnamoroll.png",
+        descricao:
+            "Cinnamoroll mesmo"
     }
 ];
 
@@ -3072,43 +3146,73 @@ function mostrarRostos() {
    ========================================================= */
 
 function abrirPessoas(atualizarURL = true) {
-
-    if (atualizarURL) {
-        definirRota("/pessoas");
-    }
+    if (atualizarURL) definirRota("/pessoas");
 
     feed.innerHTML = `
         <h2>Pessoas</h2>
-
-        <input
-            type="text"
-            class="search-bar"
-            placeholder="Pesquisar usuários..."
-        >
-
-        <div class="grid-layout">
-
-            ${
-                `
-                <div class="grid-item">
-
-                    <div
-                        style="
-                            height:60px;
-                            background:#6E99C9;
-                            margin:0 auto 5px auto;
-                            width:60px;
-                        "
-                    ></div>
-
-                    Unknown User
-
-                </div>
-                `.repeat(4)
-            }
-
+        <p>Pesquise usuários para visitar perfis, seguir pessoas e enviar pedidos de amizade.</p>
+        <div class="filter-box">
+            <input id="pesquisa-usuarios" type="text" class="search-bar" placeholder="Nome de usuário..." onkeydown="if(event.key === 'Enter') pesquisarUsuarios()">
+            <button onclick="pesquisarUsuarios()" style="padding:8px 14px;font-weight:bold;">Pesquisar</button>
+        </div>
+        <div id="resultados-usuarios" class="grid-layout">
+            <div style="grid-column:1/-1;padding:20px;text-align:center;">Digite um nome para pesquisar.</div>
         </div>
     `;
+}
+
+async function pesquisarUsuarios() {
+    const campo = document.getElementById("pesquisa-usuarios");
+    const resultados = document.getElementById("resultados-usuarios");
+    if (!campo || !resultados) return;
+    const busca = campo.value.trim();
+    if (!busca) {
+        resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;">Digite um nome de usuário.</div>';
+        return;
+    }
+    resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;">Pesquisando...</div>';
+    try {
+        const resposta = await fetch(`${API}/usuarios?busca=${encodeURIComponent(busca)}`);
+        if (!resposta.ok) throw new Error();
+        renderizarUsuarios(await resposta.json());
+    } catch (erro) {
+        resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;text-align:center;">O servidor ainda precisa da rota /usuarios para realizar a pesquisa.</div>';
+    }
+}
+
+function renderizarUsuarios(usuarios) {
+    const resultados = document.getElementById("resultados-usuarios");
+    if (!resultados) return;
+    if (!Array.isArray(usuarios) || !usuarios.length) {
+        resultados.innerHTML = '<div style="grid-column:1/-1;padding:20px;">Nenhum usuário encontrado.</div>';
+        return;
+    }
+    resultados.innerHTML = usuarios.map(usuario => `
+        <div class="grid-item">
+            <div style="height:60px;width:60px;margin:0 auto 8px;background:#6E99C9;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:24px;">☺</div>
+            <b>${usuario.username || usuario.nome || "Usuário"}</b><br>
+            <button onclick="executarAcaoSocial('/seguir','${usuario.id}','seguir')" style="margin-top:8px;padding:6px;">Seguir</button>
+            <button onclick="executarAcaoSocial('/amizade','${usuario.id}','enviar o pedido de amizade')" style="margin-top:5px;padding:6px;">Adicionar amigo</button>
+        </div>
+    `).join("");
+}
+
+async function executarAcaoSocial(rota, alvoId, acao) {
+    if (!usuarioAtual) {
+        alert("Você precisa estar logado!");
+        return;
+    }
+    try {
+        const resposta = await fetch(API + rota, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({usuarioId: usuarioAtual.id, alvoId})
+        });
+        if (!resposta.ok) throw new Error();
+        alert("Ação realizada: " + acao + "!");
+    } catch (erro) {
+        alert("Essa função precisa das rotas sociais no servidor do Procyon.");
+    }
 }
 
 /* =========================================================
